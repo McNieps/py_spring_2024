@@ -1,3 +1,4 @@
+import math
 import pygame
 import pymunk
 
@@ -63,7 +64,9 @@ class EntityScene(Scene):
             camera = self.camera
 
         for entity in self.entities:
-            entity.render(camera.get_offset_pos(entity.position), self.surface, self.rect)
+            vec = camera.get_offset_pos(entity.position)  # NOQA
+            x, y = math.floor(vec.x), math.floor(vec.y)
+            entity.render((x, y), self.surface, self.rect)
 
     @property
     def space(self) -> pymunk.Space:

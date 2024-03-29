@@ -31,20 +31,13 @@ class IsometricTilemapScene(Scene):
         # r for row, c for column
         print(tile_size)
         r_min = math.floor(self.camera.position.y/tile_size[1]*2)
-        r_max = math.ceil(self.surface.get_height()/tile_size[1]*2)+r_min+1
-        c_min = math.floor(self.camera.position.x/tile_size[0]*2)   # Need more work to take height into account
-        c_max = math.ceil(self.surface.get_width()/tile_size[0]*2)+c_min+1
-
-        print()
-        print(f"Topmost row:      {r_min}")
-        print(f"bottommost row:   {r_max}")
-        print(f"Leftmost column:  {c_min}")
-        print(f"Rightmost column: {c_max}")
+        r_max = math.ceil(self.surface.get_height()/tile_size[1]*2)+r_min+2
+        c_min = math.floor(self.camera.position.x/tile_size[0]*2)
+        c_max = math.ceil(self.surface.get_width()/tile_size[0]*2)+c_min+2  # Need more work to take height into account
 
         # r & c: row and column, i & j: tile pos in tilemap, x & y: tile pos in viewspace
         for r in range(r_min, r_max):
             for c in range(c_min, c_max):
-                print(f"row {r}, column {c}")
                 if (c + r) % 2 != 0:
                     continue
 
@@ -52,11 +45,10 @@ class IsometricTilemapScene(Scene):
                 j = (r - c)//2
 
                 if i < 0 or j < 0 or i > self.tilemap.width or j > self.tilemap.height:
-                    continue
+                    pass  # continue
 
-                print(i, j)
-                x = c*tile_size[0]/2 - camera.position.x - tile_size[0]/2
-                y = r*tile_size[1]/2 - camera.position.y - tile_size[1]/2
+                x = math.floor(c*tile_size[0]/2 - camera.position.x - tile_size[0]/2)
+                y = math.floor(r*tile_size[1]/2 - camera.position.y - tile_size[1]/2)
                 # tile
                 self.surface.blit(self.tilemap.tileset[0], (x, y))
 

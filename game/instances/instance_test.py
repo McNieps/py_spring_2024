@@ -11,7 +11,7 @@ class InstanceTest(BaseInstance):
         super().__init__(6000)
         self.create_callback()
 
-        self.tileset = {0: Resource.image["simple_soil"]}
+        self.tileset = {0: Resource.image["complex_soil"]}
         self.tilemap_array = [[-1, -1, -1, -1],
                               [ 0,  0,  0,  0],
                               [ 0, -1,  0,  0],

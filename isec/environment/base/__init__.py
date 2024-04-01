@@ -5,5 +5,7 @@ from isec.environment.base.rendering_techniques import RenderingTechniques
 from isec.environment.base.isometric_tilemap import IsometricTilemap
 from isec.environment.base.orthogonal_tilemap import OrthogonalTilemap
 from isec.environment.base.scene import Scene
+from isec.environment.base.camera import Camera
 
-__all__ = ["Sprite", "Pos", "Entity", "RenderingTechniques", "IsometricTilemap", "Scene", "OrthogonalTilemap"]
+
+__all__ = ["Sprite", "Pos", "Entity", "RenderingTechniques", "IsometricTilemap", "Scene", "OrthogonalTilemap", "Camera"]

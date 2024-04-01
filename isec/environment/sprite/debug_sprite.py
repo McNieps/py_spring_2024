@@ -31,7 +31,7 @@ class DebugSprite(AnimatedSprite):
 
         super().__init__(surfaces=cached_surfaces,
                          rendering_technique="cached",
-                         frame_durations=[0.8, 0.1, 0.1],
+                         frames_duration=[0.8, 0.1, 0.1],
                          loop=True)
 
 

@@ -1,3 +1,5 @@
+import typing
+
 import pygame
 import yaml
 import json
@@ -16,6 +18,8 @@ class Resource:
     data: dict[str: dict[str: any]] = {}
     image: dict[str: dict[str: any]] = {}
     sound: dict[str: dict[str: any]] = {}
+
+    _complete: dict = {"data": data, "image": image, "sound": sound}
 
     @classmethod
     def set_directory(cls,
@@ -282,3 +286,16 @@ class Resource:
             cache_size = cls.data["engine"]["resource"]["surface"]["caching"]["default_size"]
 
         return CachedSurface(surf, cache_size)
+
+    @classmethod
+    def get_nested(cls,
+                   keys: list[typing.Any],
+                   base_dict: dict = None) -> typing.Any:
+
+        if base_dict is None:
+            base_dict = cls._complete
+
+        for key in keys:
+            base_dict = base_dict[key]
+
+        return base_dict

@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class RenderingTechniques:
-    TYPING = typing.Literal["static", "rotated", "cached", "optimized_static"]
+    TYPING = typing.Literal["static", "rotated", "cached", "optimized_static", "forced"]
 
     @staticmethod
     def optimized_static(self: 'Sprite',
@@ -39,7 +39,6 @@ class RenderingTechniques:
 
         self.effective_surf = self.surface
         self.effective_rect = self.rect.move(*offset)
-
         if not self.effective_rect.colliderect(destination_rect):
             return
 
@@ -76,3 +75,15 @@ class RenderingTechniques:
             return
 
         destination.blit(self.effective_surf, self.effective_rect, special_flags=self.blit_flag)
+
+    @staticmethod
+    def forced(self: 'Sprite',
+               destination: pygame.Surface,
+               _destination_rect: pygame.Rect,
+               offset: Iterable,
+               _angle: float) -> None:
+
+        self.effective_surf = self.surface
+        self.effective_rect = self.rect.move(*offset)
+
+        destination.blit(self.surface, self.effective_rect, special_flags=self.blit_flag)

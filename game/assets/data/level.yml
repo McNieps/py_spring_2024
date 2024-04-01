@@ -1,0 +1,9 @@
+phase_1:
+  duration: 240
+  floor: [data, tilemaps, phase_1_floor]
+  walls: [data, tilemaps, phase_1_walls]
+
+phase_2:
+  duration: 240
+  floor: [data, tilemaps, phase_2_floor]
+  walls: [data, tilemaps, phase_2_walls]

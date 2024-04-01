@@ -1,12 +1,12 @@
 import asyncio
 
 from isec.app import App
-from game.instances.instance_test import InstanceTest
+from game.instances.instance_game import InstanceGame
 
 
 async def main() -> None:
     App.init("game/assets/")
-    await InstanceTest().execute()
+    await InstanceGame().execute()
 
 
 asyncio.run(main())

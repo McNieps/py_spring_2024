@@ -25,12 +25,9 @@ class PymunkSprite(Sprite):
         for shape in pymunk_pos.body.shapes:
             shape.cache_bb()
 
-        # bb_min_x = min([shape.bb.left for shape in pymunk_pos.shapes])
-        # bb_min_y = min([shape.bb.bottom for shape in pymunk_pos.shapes])
         bb_max_x = max([shape.bb.right for shape in pymunk_pos.body.shapes])
         bb_max_y = max([shape.bb.top for shape in pymunk_pos.body.shapes])
 
-        # surface = pygame.Surface((bb_max_x - bb_min_x, bb_max_y - bb_min_y), pygame.SRCALPHA)
         surface = pygame.Surface((bb_max_x*2, bb_max_y*2), pygame.SRCALPHA)
 
         for shape in pymunk_pos.body.shapes:
@@ -38,7 +35,6 @@ class PymunkSprite(Sprite):
 
             if isinstance(shape, pymunk.Poly):
                 shape: pymunk.Poly
-                # vertices = [v+(surface.get_size()[0]/2, surface.get_size()[1]/2) for v in shape.get_vertices()]
                 vertices = [v+(bb_max_x, bb_max_y) for v in shape.get_vertices()]
                 pygame.draw.polygon(surface,
                                     shape_color,
@@ -71,4 +67,5 @@ class PymunkSprite(Sprite):
 
         super().__init__(surface=surface,
                          rendering_technique=rendering_technique,
-                         blit_flag=blit_flag)
+                         blit_flag=blit_flag,
+                         position_anchor="center")

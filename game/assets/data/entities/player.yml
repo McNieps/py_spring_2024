@@ -1,0 +1,6 @@
+position:
+  hitbox_shape: circle
+  hitbox_radius: 5
+
+game:
+  0

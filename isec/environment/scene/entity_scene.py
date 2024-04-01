@@ -2,9 +2,8 @@ import math
 import pygame
 import pymunk
 
-from isec.environment.base.scene import Scene
-from isec.environment.base.entity import Entity
 from isec.environment.base.camera import Camera
+from isec.environment.base import RenderingTechniques, Entity, Scene
 
 
 class EntityScene(Scene):
@@ -71,3 +70,4 @@ class EntityScene(Scene):
     @property
     def space(self) -> pymunk.Space:
         return self._space
+

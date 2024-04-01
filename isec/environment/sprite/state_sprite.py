@@ -12,7 +12,8 @@ class StateSprite(AnimatedSprite):
                  surfaces: list[pygame.Surface],
                  state_dictionary: dict[str: dict],
                  rendering_technique: RenderingTechniques.TYPING = "static",
-                 blit_flag: int = 0) -> None:
+                 blit_flag: int = 0,
+                 position_anchor: tuple[int, int] | str = "center") -> None:
 
         self.current_state = "default"
         self.states = {"default": {"frames_durations": [int(i == 0) for i in range(len(surfaces))],
@@ -25,7 +26,8 @@ class StateSprite(AnimatedSprite):
                          self.states[self.current_state]["frames_durations"],
                          self.states[self.current_state]["loop"],
                          rendering_technique,
-                         blit_flag)
+                         blit_flag,
+                         position_anchor)
 
     def switch_state(self,
                      state_name: str) -> None:
@@ -49,7 +51,9 @@ class StateSprite(AnimatedSprite):
     @classmethod
     def create_from_directory(cls,
                               directory_path: str,
-                              rendering_technique: RenderingTechniques.TYPING = "static") -> Self:
+                              rendering_technique: RenderingTechniques.TYPING = "static",
+                              blit_flag: int = 0,
+                              position_anchor: tuple[int, int] | str = "center") -> Self:
 
         keys = directory_path.replace("\\", "/").rstrip("/").split("/")
 
@@ -79,4 +83,8 @@ class StateSprite(AnimatedSprite):
                 states[state]["frames_duration"][i] = frame["duration"]
                 i += 1
 
-        return cls(surfaces, states, rendering_technique=rendering_technique)
+        return cls(surfaces,
+                   states,
+                   rendering_technique,
+                   blit_flag,
+                   position_anchor)

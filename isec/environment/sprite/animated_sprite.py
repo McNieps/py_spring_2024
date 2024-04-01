@@ -9,7 +9,8 @@ class AnimatedSprite(Sprite):
                  frames_duration: list[float],
                  loop: bool = True,
                  rendering_technique: RenderingTechniques.TYPING = "static",
-                 blit_flag: int = 0) -> None:
+                 blit_flag: int = 0,
+                 position_anchor: tuple[int, int] | str = "center") -> None:
 
         if len(surfaces) == 0:
             raise ValueError("Length of surfaces must be greater than 0.")
@@ -22,7 +23,8 @@ class AnimatedSprite(Sprite):
 
         super().__init__(surface=surfaces[0],
                          rendering_technique=rendering_technique,
-                         blit_flag=blit_flag)
+                         blit_flag=blit_flag,
+                         position_anchor=position_anchor)
 
         self.surfaces: list[pygame.Surface] = surfaces
         self.frames_duration: list[float] = frames_duration

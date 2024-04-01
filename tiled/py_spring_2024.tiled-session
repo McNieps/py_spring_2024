@@ -1,0 +1,36 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "phase_1.tmx",
+    "fileStates": {
+        "phase_1.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 261,
+                "y": 46.33333333333337
+            }
+        },
+        "tileset.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/Lucas/PycharmProjects/py_spring_2024/game/assets/data/tilemaps",
+    "last.imagePath": "C:/Users/Lucas/PycharmProjects/py_spring_2024/game/assets/image",
+    "map.height": 32,
+    "map.lastUsedExportFilter": "All Files (*)",
+    "map.lastUsedFormat": "tmx",
+    "map.width": 32,
+    "openFiles": [
+        "phase_1.tmx"
+    ],
+    "recentFiles": [
+        "phase_1.tmx",
+        "tileset.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}

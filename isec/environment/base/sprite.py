@@ -1,4 +1,3 @@
-import math
 import typing
 import pygame
 
@@ -11,7 +10,7 @@ from isec.environment.base.rendering_techniques import RenderingTechniques
 class Sprite:
     __slots__ = ["surface",
                  "rect",
-                 "max_rect",
+                 # "max_rect",
                  "effective_surf",
                  "effective_rect",
                  "_rendering_technique",
@@ -20,14 +19,33 @@ class Sprite:
     def __init__(self,
                  surface: pygame.Surface,
                  rendering_technique: RenderingTechniques.TYPING = "static",
-                 blit_flag: int = 0) -> None:
+                 blit_flag: int = 0,
+                 position_anchor: tuple[int, int] | str = "center") -> None:
 
         self.surface = surface
         self.rect = self.surface.get_rect()
-        self.max_rect = self.rect.copy()
-        self.max_rect.width = math.ceil(self.max_rect.width * math.sqrt(2))
-        self.max_rect.height = math.ceil(self.max_rect.height * math.sqrt(2))
-        self.rect.center = self.max_rect.center = 0, 0
+        # self.max_rect = self.rect.copy()
+        # self.max_rect.width = math.ceil(self.max_rect.width * math.sqrt(2))
+        # self.max_rect.height = math.ceil(self.max_rect.height * math.sqrt(2))
+        # self.max_rect.center = 0, 0
+
+        if isinstance(position_anchor, tuple):
+            self.rect.topleft = -position_anchor[0], -position_anchor[1]
+        elif isinstance(position_anchor, str):
+            # lmao
+            match position_anchor:
+                case "center": self.rect.center = 0, 0
+                case "topleft": self.rect.topleft = 0, 0
+                case "midtop": self.rect.midtop = 0, 0
+                case "topright": self.rect.topright = 0, 0
+                case "midright": self.rect.midright = 0, 0
+                case "bottomright": self.rect.bottomright = 0, 0
+                case "midbottom": self.rect.midbottom = 0, 0; print("i")
+                case "bottomleft": self.rect.bottomleft = 0, 0
+                case "midleft": self.rect.midleft = 0, 0
+                case _: raise Exception("ducon")
+
+        # self.rect.midbottom = 0, 0   # REPLACED self.rect.center WITH self.rect.midbottom
 
         self.effective_surf = self.surface
         self.effective_rect = self.rect
@@ -75,8 +93,8 @@ class Sprite:
 
     def switch_state(self,
                      state: str) -> None:
-        err_msg = f"Only StateSprite support switch_state method"
         if state not in self.surface:
+            err_msg = f"Only StateSprite support switch_state method"
             raise ValueError(err_msg)
 
     def flip(self):

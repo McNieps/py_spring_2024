@@ -57,6 +57,9 @@ class PymunkPos(Pos):
                  default_shape_info: Type[PymunkShapeInfo] = None,
                  position: pygame.Vector2 = None) -> None:
 
+        if default_shape_info is None:
+            default_shape_info = BaseShapeInfo
+
         super().__init__()
 
         self.space = space

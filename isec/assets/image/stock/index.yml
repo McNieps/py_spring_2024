@@ -1,0 +1,11 @@
+arrow:
+  cached: false
+  cache_size: 1
+
+illapsum_splash:
+  cached: false
+  cache_size: 1
+
+face:
+  cached: false
+  cache_size: 16

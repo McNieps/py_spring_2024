@@ -23,11 +23,17 @@ class IsometricTilemap:
         if tile_size is None:
             tile_size = self._tile_size_from_tileset(tileset)
 
+        if heightmap_array is None:
+            heightmap_array = [[0 for i in range(len(tilemap_array[0]))] for j in range(len(tilemap_array))]
+
         self.tilemap_array = tilemap_array
         self.heightmap_array = heightmap_array
         self.tileset = tileset
         self.tile_size = tile_size
-
+        self.min_col = self.height - 1
+        self.max_col = self.width - 1
+        self.min_row = 0
+        self.max_row = self.width + self.height - 2
         self._check_tileset_validity(self.tilemap_array, self.tileset)
 
     @staticmethod

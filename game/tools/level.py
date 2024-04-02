@@ -30,7 +30,7 @@ class Level:
         self.player = Player((200, 200))
         self.player.sprite.switch_state("idle")
         # self.player_debug = Entity(self.player.position, PymunkSprite(self.player.position, "static"))
-        self.entity_scene.add_entities(self.player)  # , self.player_debug)
+        self.entity_scene.add_entities(self.player, self.player.weapon)  # , self.player_debug)
 
     def update(self) -> None:
         delta = self.linked_instance.delta
@@ -38,8 +38,8 @@ class Level:
         self.entity_scene.camera.position.x = self.player.position.x-200
         self.entity_scene.camera.position.y = self.player.position.y-150
 
-
     def render(self) -> None:
+        self.entity_scene.z_sort()
         self.linked_instance.window.fill((32, 32, 32))
         for terrain_scene in self.terrain_scenes:
             terrain_scene.render()

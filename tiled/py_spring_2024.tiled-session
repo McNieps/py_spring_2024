@@ -4,13 +4,15 @@
         "width": 2
     },
     "activeFile": "phase_1.tmx",
+    "expandedProjectPaths": [
+    ],
     "fileStates": {
         "phase_1.tmx": {
-            "scale": 1.5,
-            "selectedLayer": 1,
+            "scale": 5.5,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 261,
-                "y": 46.33333333333337
+                "x": 470.6363636363636,
+                "y": 123.18181818181819
             }
         },
         "tileset.tsx": {
@@ -28,6 +30,7 @@
     "openFiles": [
         "phase_1.tmx"
     ],
+    "project": "",
     "recentFiles": [
         "phase_1.tmx",
         "tileset.tsx"

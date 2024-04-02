@@ -64,6 +64,9 @@ class EntityScene(Scene):
 
         self.space.step(self.avg_delta)
 
+    def z_sort(self):
+        self.entities.sort(key=lambda ent: ent.position.y)
+
     def render(self,
                camera: Camera = None) -> None:
 

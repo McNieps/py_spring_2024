@@ -7,6 +7,7 @@ from isec.environment.sprite import StateSprite
 from isec.environment.position import PymunkPos
 
 from game.entities.shape_info import PlayerShapeInfo
+from game.weapons.pan import Pan
 
 
 class Player(Entity):
@@ -26,15 +27,28 @@ class Player(Entity):
 
         super().__init__(position, sprite)
 
+        # Inputs related
         self.last_dir = -1
         self.inputs = {"up": False, "down": False, "left": False, "right": False}
-        self.attributes = {"speed": 7500}
+
+        # Gameplay related
+        self.attributes = {"speed": 1000}
+        self.weapon = Pan()
 
     def update(self,
                delta: float) -> None:
 
-        self.sprite.update(delta*4)
+        self.sprite.update(delta)
         self.handle_movement(delta)
+        weapon_vec = -pygame.Vector2(200, 150) + pygame.mouse.get_pos()
+        if weapon_vec.length():
+            weapon_vec.scale_to_length(15)
+            self.weapon.position.x = self.position.x + weapon_vec.x
+            self.weapon.position.y = self.position.y + weapon_vec.y - 3
+            self.weapon.position.angle = weapon_vec.angle_to((1, 0))
+
+        else:
+            self.weapon.position.x, self.weapon.position.y = self.position.x, self.position.y
 
     def handle_movement(self,
                         delta: float) -> None:

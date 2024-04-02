@@ -95,5 +95,7 @@ class Sprite:
             err_msg = f"Only StateSprite support switch_state method"
             raise ValueError(err_msg)
 
-    def flip(self):
-        self.surface = pygame.transform.flip(self.surface, True, False)
+    def flip(self,
+             x: bool = True,
+             y: bool = False) -> None:
+        self.surface = pygame.transform.flip(self.surface, x, y)

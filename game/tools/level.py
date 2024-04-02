@@ -66,4 +66,5 @@ class Level:
 
     def add_callbacks(self):
         self.player.add_callbacks(self.linked_instance)
-        self.linked_instance.event_handler.register_keydown_callback(pygame.K_ESCAPE, LoopHandler.stop_game)
+        self.linked_instance.event_handler.register_callback("click", "down", LoopHandler.stop_game)
+        print(self.linked_instance.event_handler._mouse_cbs)

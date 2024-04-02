@@ -3,243 +3,142 @@ import typing
 
 
 class EventHandler:
-    def __init__(self) -> None:
+    def __init__(self,
+                 key_dict: dict) -> None:
+
         self.events = []
         self.mouse_rel = (0, 0)
-
-        self._keypressed_callbacks: dict[int, list[typing.Callable]] = {}
-        self._keydown_callbacks: dict[int, list[typing.Callable]] = {}
-        self._keyup_callbacks: dict[int, list[typing.Callable]] = {}
-
-        self._buttonpressed_callbacks: dict[int, list[typing.Callable]] = {}
-        self._buttondown_callbacks: dict[int, list[typing.Callable]] = {}
-        self._buttonup_callbacks: dict[int, list[typing.Callable]] = {}
-
-        self._mouse_move_callbacks: list[typing.Callable[[tuple[int, int]], None]] = []
-
-        self._quit_callbacks: list[typing.Callable] = []
-
-    def remove_key_binding(self,
-                                 key: int) -> None:
-        """Removes all callbacks from the key."""
-
-        if key in self._keypressed_callbacks:
-            self._keypressed_callbacks.pop(key)
-        if key in self._keydown_callbacks:
-            self._keydown_callbacks.pop(key)
-        if key in self._keyup_callbacks:
-            self._keyup_callbacks.pop(key)
-
-    def remove_button_binding(self,
-                                    button: int) -> None:
-        """Removes all callbacks from the button."""
-
-        if button in self._buttonpressed_callbacks:
-            self._buttonpressed_callbacks.pop(button)
-        if button in self._buttondown_callbacks:
-            self._buttondown_callbacks.pop(button)
-        if button in self._buttonup_callbacks:
-            self._buttonup_callbacks.pop(button)
-
-    def remove_callback(self,
-                              callback: typing.Callable) -> None:
-        """Removes all callbacks from the callback."""
-
-        for key in self._keypressed_callbacks:
-            while callback in self._keypressed_callbacks[key]:
-                self._keypressed_callbacks[key].remove(callback)
-        for key in self._keydown_callbacks:
-            while callback in self._keydown_callbacks[key]:
-                self._keydown_callbacks[key].remove(callback)
-        for key in self._keyup_callbacks:
-            while callback in self._keyup_callbacks[key]:
-                self._keyup_callbacks[key].remove(callback)
-        for button in self._buttonpressed_callbacks:
-            while callback in self._buttonpressed_callbacks[button]:
-                self._buttonpressed_callbacks[button].remove(callback)
-        for button in self._buttondown_callbacks:
-            while callback in self._buttondown_callbacks[button]:
-                self._buttondown_callbacks[button].remove(callback)
-        for button in self._buttonup_callbacks:
-            while callback in self._buttonup_callbacks[button]:
-                self._buttonup_callbacks[button].remove(callback)
-        while callback in self._mouse_move_callbacks:
-            self._mouse_move_callbacks.remove(callback)
-        while callback in self._quit_callbacks:
-            self._quit_callbacks.remove(callback)
-
-    def clear(self) -> None:
-        """Removes all callbacks."""
-
-        self._keypressed_callbacks = {}
-        self._keydown_callbacks = {}
-        self._keyup_callbacks = {}
-        self._buttonpressed_callbacks = {}
-        self._buttondown_callbacks = {}
-        self._buttonup_callbacks = {}
-        self._mouse_move_callbacks = []
+        self._callbacks = self._create_callbacks_dict(key_dict)
+        self._keyboard_cbs = {}
+        self._mouse_cbs = {}
         self._quit_callbacks = []
+        self.sort_callbacks()
 
-    def register_keypressed_callback(self,
-                                     key: int,
-                                     callback: typing.Callable) -> None:
-        """Registers a callback to be called when the key is pressed."""
+    def register_callback(self,
+                          action: str,
+                          action_type: typing.Literal["up", "down", "pressed"],
+                          callback: typing.Callable) -> None:
 
-        if key not in self._keypressed_callbacks:
-            self._keypressed_callbacks[key] = []
-        self._keypressed_callbacks[key].append(callback)
+        if action not in self._callbacks:
+            valid_actions = "- "+"\n- ".join(self._callbacks.keys())
+            err_msg = f"{action} is not a valid action. Valid actions are: \n{valid_actions}"
+            raise ValueError(err_msg)
 
-    def register_keydown_callback(self,
-                                  key: int,
-                                  callback: typing.Callable) -> None:
-        """Registers a callback to be called when the key is down."""
+        if action_type not in ["up", "down", "pressed"]:
+            err_msg = f"{action_type} is not a valid action_type. Must be either up, down or pressed."
+            raise ValueError(err_msg)
 
-        if key not in self._keydown_callbacks:
-            self._keydown_callbacks[key] = []
-        self._keydown_callbacks[key].append(callback)
-
-    def register_keyup_callback(self,
-                                key: int,
-                                callback: typing.Callable) -> None:
-        """Registers a callback to be called when the key is up."""
-        if key not in self._keyup_callbacks:
-            self._keyup_callbacks[key] = []
-        self._keyup_callbacks[key].append(callback)
-
-    def register_buttonpressed_callback(self,
-                                        button: int,
-                                        callback: typing.Callable) -> None:
-        """Registers a callback to be called when the button is pressed."""
-        if button-1 not in self._buttonpressed_callbacks:
-            self._buttonpressed_callbacks[button-1] = []
-        self._buttonpressed_callbacks[button-1].append(callback)
-
-    def register_buttondown_callback(self,
-                                     button: int,
-                                     callback: typing.Callable) -> None:
-        """Registers a callback to be called when the button is down."""
-        if button not in self._buttondown_callbacks:
-            self._buttondown_callbacks[button] = []
-        self._buttondown_callbacks[button].append(callback)
-
-    def register_buttonup_callback(self,
-                                   button: int,
-                                   callback: typing.Callable) -> None:
-        """Registers a callback to be called when the button is up."""
-        if button not in self._buttonup_callbacks:
-            self._buttonup_callbacks[button] = []
-        self._buttonup_callbacks[button].append(callback)
-
-    def register_mouse_move_callback(self,
-                                     callback: typing.Callable[[tuple[int, int]], None]) -> None:
-        """Registers a callback to be called when the cursor is dragging."""
-        self._mouse_move_callbacks.append(callback)
+        self._callbacks[action]["callbacks"][action_type].add(callback)
+        self.sort_callbacks()
 
     def register_quit_callback(self,
                                callback: typing.Callable) -> None:
-        """Registers a callback to be called when the game is quit."""
+
         self._quit_callbacks.append(callback)
 
+    def sort_callbacks(self) -> None:
+        self._keyboard_cbs = {}
+        self._mouse_cbs = {}
+
+        for action in self._callbacks:
+            if self._callbacks[action]["method"] == "keyboard":
+                self._keyboard_cbs[action] = self._callbacks[action]
+                continue
+
+            if self._callbacks[action]["method"] == "mouse":
+                self._mouse_cbs[action] = self._callbacks[action]
+                continue
+
+    async def handle_all(self) -> None:
+        await self.handle_events()
+        await self.hande_pressed()
+
     async def handle_events(self) -> None:
-        """Handles all events."""
         self.events = pygame.event.get()
         self.mouse_rel = pygame.mouse.get_rel()
 
         for event in self.events:
             if event.type == pygame.QUIT:
-                await self._quit()
+                for callback in self._quit_callbacks:
+                    await callback()
                 continue
 
             if event.type == pygame.KEYDOWN:
-                await self._keydown(event.key)
+                await self._handle_keyboard("down", event.key)
                 continue
 
             if event.type == pygame.KEYUP:
-                await self._keyup(event.key)
+                await self._handle_keyboard("up", event.key)
                 continue
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                await self._buttondown(event.button)
+                print(event)
+                await self._handle_mouse("down", event.button)
                 continue
 
             if event.type == pygame.MOUSEBUTTONUP:
-                await self._buttonup(event.button)
+                await self._handle_mouse("up", event.button)
                 continue
 
-            if event.type == pygame.MOUSEMOTION:
-                await self._mouse_move()
-
+    async def hande_pressed(self):
         key_pressed = pygame.key.get_pressed()
+        for action in self._keyboard_cbs:
+            if not key_pressed[self._keyboard_cbs[action]["key"]]:
+                continue
+            for callback in self._keyboard_cbs[action]["callbacks"]["pressed"]:
+                await callback()
+
         button_pressed = pygame.mouse.get_pressed(5)
+        for action in self._mouse_cbs:
+            if not button_pressed[self._mouse_cbs[action]["key"]]:
+                continue
+            for callback in self._mouse_cbs[action]["callbacks"]["pressed"]:
+                await callback()
 
-        for key in self._keypressed_callbacks:
-            if key_pressed[key]:
-                await self._keypressed(key)
+    async def _handle_keyboard(self,
+                               action_type: typing.Literal["up", "down", "pressed"],
+                               action_key: int) -> None:
 
-        for button in self._buttonpressed_callbacks:
-            if button_pressed[button]:
-                await self._buttonpressed(button)
+        for action in self._keyboard_cbs:
+            if self._keyboard_cbs[action]["key"] != action_key:
+                continue
+            for callback in self._keyboard_cbs[action]["callbacks"][action_type]:
+                await callback()
 
-    async def _keypressed(self,
-                          key: int) -> None:
-        """Calls all callbacks registered to the key pressed."""
-        if key not in self._keypressed_callbacks:
-            return
+    async def _handle_mouse(self,
+                            action_type: typing.Literal["up", "down", "pressed"],
+                            action_button: int):
 
-        for callback in self._keypressed_callbacks[key]:
-            await callback()
+        for action in self._mouse_cbs:
+            if self._mouse_cbs[action]["key"] != action_button:
+                continue
+            for callback in self._mouse_cbs[action]["callbacks"][action_type]:
+                await callback()
 
-    async def _keydown(self,
-                       key: int) -> None:
-        """Calls all callbacks registered to the key down."""
-        if key not in self._keydown_callbacks:
-            return
+    @classmethod
+    def _create_callbacks_dict(cls,
+                               key_dict: dict[str, dict[str, str]]) -> dict:
 
-        for callback in self._keydown_callbacks[key]:
-            await callback()
+        callbacks_map = {}
+        for action, value in key_dict.items():
+            method, key = cls._guess_peripheral_and_id(value["key"])
+            callbacks_map[action] = {"key": key, "method": method, "callbacks": {"down": set(),
+                                                                                 "up": set(),
+                                                                                 "pressed": set()}}
+        return callbacks_map
 
-    async def _keyup(self,
-                     key: int) -> None:
-        """Calls all callbacks registered to the key leave."""
-        if key not in self._keyup_callbacks:
-            return
+    @classmethod
+    def _guess_peripheral_and_id(cls,
+                                 key_button_str: str) -> tuple[str, int]:
 
-        for callback in self._keyup_callbacks[key]:
-            await callback()
+        first_part, second_part = key_button_str.split("_", 1)
 
-    async def _buttonpressed(self,
-                             button: int) -> None:
-        """Calls all callbacks registered to the button pressed."""
-        if button not in self._buttonpressed_callbacks:
-            return
+        if first_part == "K":
+            return "keyboard", vars(pygame)[key_button_str]
 
-        for callback in self._buttonpressed_callbacks[button]:
-            await callback()
+        if first_part == "B":
+            return "mouse", int(second_part)
 
-    async def _buttondown(self,
-                          button: int) -> None:
-        """Calls all callbacks registered to the button down."""
-        if button not in self._buttondown_callbacks:
-            return
-
-        for callback in self._buttondown_callbacks[button]:
-            await callback()
-
-    async def _buttonup(self,
-                        button: int) -> None:
-        """Calls all callbacks registered to the button up."""
-        if button not in self._buttonup_callbacks:
-            return
-
-        for callback in self._buttonup_callbacks[button]:
-            await callback()
-
-    async def _mouse_move(self) -> None:
-        """Calls all callbacks registered to the mouse move."""
-        for callback in self._mouse_move_callbacks:
-            await callback(self.mouse_rel)
-
-    async def _quit(self) -> None:
-        """Calls all callbacks registered to the quit event."""
-        for callback in self._quit_callbacks:
-            await callback()
+        err_msg = (f"control key {key_button_str} is invalid! "
+                   f"It must start with either K for keyboard control or B for mouse control")
+        raise ValueError(err_msg)

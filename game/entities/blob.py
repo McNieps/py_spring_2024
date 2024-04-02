@@ -15,7 +15,7 @@ class Blob(BaseEnemy):
                         "static",
                         0,
                         Resource.data["entities"]["blob"]["sprite"]["anchor"])
-        print(sprite.rect)
+
         position = self.create_position(position, EnemyShapeInfo)
 
         super().__init__(sprite, position)

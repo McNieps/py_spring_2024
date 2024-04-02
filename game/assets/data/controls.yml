@@ -1,0 +1,13 @@
+BaseInstance:
+  return: {key: K_RETURN}
+  quit: {key: K_ESCAPE}
+  click: {key: B_1}
+
+InstanceGame:
+  up: {key: K_z}
+  left: {key: K_q}
+  down: {key: K_s}
+  right: {key: K_d}
+  primary: {key: B_1}
+  secondary: {key: B_3}
+  dodge: {key: K_SPACE}

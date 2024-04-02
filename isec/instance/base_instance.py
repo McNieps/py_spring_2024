@@ -10,19 +10,21 @@ class BaseInstance:
     def __init__(self,
                  fps: int = None):
 
-        self.window = isec.app.App.window
-
         if fps is None:
             fps = Resource.data["instances"]["default"]["fps"]
 
-        self.event_handler = EventHandler()
+        key_dict = Resource.data["controls"][self.__class__.__name__]
+        key_dict.update(Resource.data["controls"]["BaseInstance"])
+
+        self.event_handler = EventHandler(key_dict)
         self.event_handler.register_quit_callback(LoopHandler.stop_game)
+        self.window = isec.app.App.window
         self.fps = fps
 
     async def _preloop(self):
         pygame.display.flip()
         LoopHandler.limit_and_get_delta(self.fps)
-        await self.event_handler.handle_events()
+        await self.event_handler.handle_all()
 
     async def setup(self):
         return

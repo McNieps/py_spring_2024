@@ -14,7 +14,8 @@ class Sprite:
                  "effective_surf",
                  "effective_rect",
                  "_rendering_technique",
-                 "blit_flag"]
+                 "blit_flag",
+                 "displayed"]
 
     def __init__(self,
                  surface: pygame.Surface,
@@ -22,6 +23,7 @@ class Sprite:
                  blit_flag: int = 0,
                  position_anchor: tuple[int, int] | str = "center") -> None:
 
+        self.displayed: bool = True
         self.surface = surface
         self.rect = self.surface.get_rect()
         # self.max_rect = self.rect.copy()
@@ -31,7 +33,7 @@ class Sprite:
 
         # lmao
         match position_anchor:
-            case x, y: self.rect.topleft = -x, -y; print(x, y)
+            case x, y: self.rect.topleft = -x, -y
             case "center": self.rect.center = 0, 0
             case "topleft": self.rect.topleft = 0, 0
             case "midtop": self.rect.midtop = 0, 0
@@ -82,6 +84,9 @@ class Sprite:
                destination_rect: pygame.Rect,
                offset: Iterable,
                angle: float) -> None:
+
+        if not self.displayed:
+            return
 
         self._rendering_technique(self,
                                   destination,

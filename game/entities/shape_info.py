@@ -3,11 +3,12 @@ import pymunk
 from isec.environment.position.pymunk_pos import PymunkShapeInfo
 
 
-__all__ = ["PlayerShapeInfo", "TerrainShapeInfo"]
+__all__ = ["PlayerShapeInfo", "TerrainShapeInfo", "EnemyShapeInfo"]
 
 
 _collision_masks_input = {"PLAYER": ["TERRAIN"],
-                          "TERRAIN": ["PLAYER"]}
+                          "TERRAIN": ["*"],
+                          "ENEMY": ["ENEMY"]}
 
 
 _collision_types = {key: i for i, key in enumerate(_collision_masks_input)}
@@ -42,6 +43,20 @@ class TerrainShapeInfo(PymunkShapeInfo):
     collision_type: int = 1
     collision_category: int = _collision_categories["TERRAIN"]
     collision_mask: int = _collision_masks["TERRAIN"]
+    shape_filter: pymunk.ShapeFilter = pymunk.ShapeFilter(group=collision_type,
+                                                          categories=collision_category,
+                                                          mask=collision_mask)
+
+    elasticity: float = 0
+    friction: float = 0
+    density: float = 0
+    sensor: bool = False
+
+
+class EnemyShapeInfo(PymunkShapeInfo):
+    collision_type: int = 2
+    collision_category: int = _collision_categories["ENEMY"]
+    collision_mask: int = _collision_masks["ENEMY"]
     shape_filter: pymunk.ShapeFilter = pymunk.ShapeFilter(group=collision_type,
                                                           categories=collision_category,
                                                           mask=collision_mask)

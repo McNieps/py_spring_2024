@@ -31,7 +31,7 @@ class Sprite:
 
         # lmao
         match position_anchor:
-            case x, y: self.rect.topleft = -x, -y
+            case x, y: self.rect.topleft = -x, -y; print(x, y)
             case "center": self.rect.center = 0, 0
             case "topleft": self.rect.topleft = 0, 0
             case "midtop": self.rect.midtop = 0, 0

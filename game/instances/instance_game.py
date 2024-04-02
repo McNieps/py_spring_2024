@@ -11,5 +11,6 @@ class InstanceGame(BaseInstance):
         self.level.add_callbacks()
 
     async def loop(self):
+        LoopHandler.fps_caption()
         self.level.update()
         self.level.render()

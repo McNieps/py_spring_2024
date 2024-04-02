@@ -4,49 +4,40 @@ import pymunk.autogeometry
 
 from typing import Self, Type
 
-from isec.instance import BaseInstance
-from isec.environment.base import Entity, Sprite
-from isec.environment.scene import EntityScene, ComposedScene
-from isec.environment.position.pymunk_pos import PymunkPos, PymunkShapeInfo
+from isec.environment.base import Entity, Sprite, OrthogonalTilemap
 from isec.environment.sprite import PymunkSprite
+from isec.environment.position.pymunk_pos import PymunkPos, PymunkShapeInfo
 
 
 class TerrainCollision(Entity):
-    SHAPES_RADIUS = 2.5
+    SHAPES_RADIUS = 0.5
 
     def __init__(self,
                  polygon: list[tuple],
                  shape_info: Type[PymunkShapeInfo],
-                 linked_scene: EntityScene | ComposedScene,
-                 linked_instance: BaseInstance,
                  show_collisions: bool = False) -> None:
 
-        position = PymunkPos(space=linked_scene.space,
-                             body_type="STATIC",
+        position = PymunkPos(body_type="STATIC",
                              default_shape_info=shape_info)
 
         position.add_shape(pymunk.Poly(body=position.body,
                                        vertices=polygon,
                                        radius=self.SHAPES_RADIUS))
 
-        position.add_to_space()
+        # position.add_to_space()
 
         if show_collisions:
             sprite = PymunkSprite(position)
         else:
-            sprite = Sprite(pygame.Surface((1, 1), pygame.SRCALPHA))
+            sprite = Sprite(pygame.Surface((0, 0), pygame.SRCALPHA))
 
         super().__init__(position=position,
-                         sprite=sprite,
-                         linked_scene=linked_scene,
-                         linked_instance=linked_instance)
+                         sprite=sprite)
 
     @classmethod
     def from_collision_map(cls,
                            collision_map: list[list[bool]],
                            tile_size: int,
-                           linked_scene: EntityScene | ComposedScene,
-                           linked_instance: BaseInstance,
                            shape_info: Type[PymunkShapeInfo] = None,
                            show_collisions: bool = False) -> list[Self]:
 
@@ -61,8 +52,6 @@ class TerrainCollision(Entity):
         for polygon in cls._decompose_collision_map_into_polygons(collision_map, tile_size):
             new_body = cls(polygon=polygon,
                            shape_info=shape_info,
-                           linked_scene=linked_scene,
-                           linked_instance=linked_instance,
                            show_collisions=show_collisions)
 
             entities.append(new_body)
@@ -109,3 +98,17 @@ class TerrainCollision(Entity):
                 concave_polyset.append(fixed_polygon)
 
         return concave_polyset
+
+    @classmethod
+    def from_tilemap(cls,
+                     tilemap: OrthogonalTilemap,
+                     shape_info: Type[PymunkShapeInfo] = None,
+                     show_collisions: bool = False) -> list[Self]:
+
+        return cls.from_collision_map([[i != -1 for i in j] for j in tilemap.tilemap_array],
+                                      tilemap.tile_size,
+                                      shape_info,
+                                      show_collisions)
+
+
+

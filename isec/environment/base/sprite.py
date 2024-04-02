@@ -29,21 +29,19 @@ class Sprite:
         # self.max_rect.height = math.ceil(self.max_rect.height * math.sqrt(2))
         # self.max_rect.center = 0, 0
 
-        if isinstance(position_anchor, tuple):
-            self.rect.topleft = -position_anchor[0], -position_anchor[1]
-        elif isinstance(position_anchor, str):
-            # lmao
-            match position_anchor:
-                case "center": self.rect.center = 0, 0
-                case "topleft": self.rect.topleft = 0, 0
-                case "midtop": self.rect.midtop = 0, 0
-                case "topright": self.rect.topright = 0, 0
-                case "midright": self.rect.midright = 0, 0
-                case "bottomright": self.rect.bottomright = 0, 0
-                case "midbottom": self.rect.midbottom = 0, 0; print("i")
-                case "bottomleft": self.rect.bottomleft = 0, 0
-                case "midleft": self.rect.midleft = 0, 0
-                case _: raise Exception("ducon")
+        # lmao
+        match position_anchor:
+            case x, y: self.rect.topleft = -x, -y
+            case "center": self.rect.center = 0, 0
+            case "topleft": self.rect.topleft = 0, 0
+            case "midtop": self.rect.midtop = 0, 0
+            case "topright": self.rect.topright = 0, 0
+            case "midright": self.rect.midright = 0, 0
+            case "bottomright": self.rect.bottomright = 0, 0
+            case "midbottom": self.rect.midbottom = 0, 0
+            case "bottomleft": self.rect.bottomleft = 0, 0
+            case "midleft": self.rect.midleft = 0, 0
+            case _: raise Exception("position anchor is not valid")
 
         # self.rect.midbottom = 0, 0   # REPLACED self.rect.center WITH self.rect.midbottom
 

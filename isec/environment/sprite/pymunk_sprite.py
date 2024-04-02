@@ -2,16 +2,20 @@ import pygame
 import pymunk
 import random
 
-from isec.environment.base import Sprite, RenderingTechniques
+from isec.environment.base import Sprite, RenderingTechniques, Pos
 from isec.environment.position.pymunk_pos import PymunkPos
 
 
 class PymunkSprite(Sprite):
     def __init__(self,
-                 pymunk_pos: PymunkPos,
+                 pymunk_pos: Pos,
                  rendering_technique: RenderingTechniques.TYPING = "optimized_static",
                  blit_flag: int = 0,
                  color: tuple[int, int, int] = None) -> None:
+
+        if not isinstance(pymunk_pos, PymunkPos):
+            err_msg = f"pymunk_pos variable is not an instance of PymunkPos"
+            raise TypeError(err_msg)
 
         if pymunk_pos.body is None:
             raise ValueError("Position must be of type PymunkPos")

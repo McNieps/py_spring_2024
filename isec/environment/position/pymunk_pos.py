@@ -53,7 +53,6 @@ class PymunkPos(Pos):
 
     def __init__(self,
                  body_type: Literal["DYNAMIC", "KINEMATIC", "STATIC"] = "DYNAMIC",
-                 space: pymunk.Space = None,
                  default_shape_info: Type[PymunkShapeInfo] = None,
                  position: pygame.Vector2 = None) -> None:
 
@@ -62,7 +61,7 @@ class PymunkPos(Pos):
 
         super().__init__()
 
-        self.space = space
+        self.space = None
         self.body = pymunk.Body(body_type=self._body_type_dict[body_type])
 
         self.shape_info = default_shape_info
@@ -89,7 +88,9 @@ class PymunkPos(Pos):
 
         return shape
 
-    def add_to_space(self) -> None:
+    def add_to_space(self,
+                     space: pymunk.Space) -> None:
+        self.space = space
         self.space.add(self.body, *self.shapes)
 
     def remove_from_space(self) -> None:

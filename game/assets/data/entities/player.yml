@@ -1,6 +1,10 @@
 position:
   hitbox_shape: circle
+  hitbox_center: [7, 25]
   hitbox_radius: 5
+  mass: 1
+  air_resistance: 0.01
 
 game:
-  0
+  base_speed:
+  air_resistance: 0.05  # Of base speed conserved each sec

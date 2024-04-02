@@ -22,7 +22,7 @@
     "last.exportedFilePath": "C:/Users/Lucas/PycharmProjects/py_spring_2024/game/assets/data/tilemaps",
     "last.imagePath": "C:/Users/Lucas/PycharmProjects/py_spring_2024/game/assets/image",
     "map.height": 32,
-    "map.lastUsedExportFilter": "All Files (*)",
+    "map.lastUsedExportFilter": "CSV files (*.csv)",
     "map.lastUsedFormat": "tmx",
     "map.width": 32,
     "openFiles": [

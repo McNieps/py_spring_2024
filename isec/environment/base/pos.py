@@ -39,7 +39,8 @@ class Pos:
                delta: float) -> None:
         pass
 
-    def add_to_space(self) -> None:
+    def add_to_space(self,
+                     space: pymunk.Space) -> None:
         err_msg = "Only PymunkPos support add_to_space method"
         raise TypeError(err_msg)
 

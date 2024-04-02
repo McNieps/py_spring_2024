@@ -8,9 +8,8 @@ class InstanceGame(BaseInstance):
     def __init__(self):
         super().__init__(fps=Resource.data["instance"]["game"]["fps"])
         self.level = Level(self)
+        self.level.add_callbacks()
 
     async def loop(self):
         self.level.update()
-        # self.gui.update()
         self.level.render()
-        # self.gui.render()

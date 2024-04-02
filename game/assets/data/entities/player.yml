@@ -3,7 +3,7 @@ position:
   hitbox_center: [7, 25]
   hitbox_radius: 5
   mass: 1
-  air_resistance: 0.01
+  air_resistance: 0.001
 
 game:
   base_speed:

@@ -26,32 +26,56 @@ class Player(Entity):
 
         super().__init__(position, sprite)
 
+        self.last_dir = -1
+        self.inputs = {"up": False, "down": False, "left": False, "right": False}
+        self.attributes = {"speed": 7500}
+
     def update(self,
                delta: float) -> None:
-        self.position.speed *= 0.01 ** delta
+
+        self.sprite.update(delta*4)
+        self.handle_movement(delta)
+
+    def handle_movement(self,
+                        delta: float) -> None:
+
+        self.position.speed *= 0.001 ** delta
+
+        move_vec = (pygame.Vector2(1, 0) * (self.inputs["right"]-self.inputs["left"]) +
+                    pygame.Vector2(0, 1) * (self.inputs["down"]-self.inputs["up"]))
+
+        if move_vec.length() == 0:
+            self.sprite.switch_state("idle")
+            self.inputs = {"up": False, "down": False, "left": False, "right": False}
+            return
+
+        if move_vec.x * self.last_dir < 0:
+            self.last_dir = -self.last_dir
+            self.sprite.flip()
+
+        self.sprite.switch_state("run")
+
+        move_vec.scale_to_length(self.attributes["speed"])
+        self.position.body.apply_force_at_local_point((move_vec.x, move_vec.y))
+
+        self.inputs = {"up": False, "down": False, "left": False, "right": False}
 
     def add_callbacks(self,
                       instance: BaseInstance):
 
-        force = 500
-
         async def move_up():
-
-            # self.position.y -= speed * instance.delta
-            self.position.body.apply_force_at_local_point((0, -force))
+            self.inputs["up"] = True
 
         async def move_down():
-            self.position.body.apply_force_at_local_point((0, force))
+            self.inputs["down"] = True
 
         async def move_left():
-            self.position.body.apply_force_at_local_point((-force, 0))
+            self.inputs["left"] = True
 
         async def move_right():
-            self.position.body.apply_force_at_local_point((force, 0))
+            self.inputs["right"] = True
 
         instance.event_handler.register_keypressed_callback(pygame.K_z, move_up)
         instance.event_handler.register_keypressed_callback(pygame.K_s, move_down)
         instance.event_handler.register_keypressed_callback(pygame.K_q, move_left)
         instance.event_handler.register_keypressed_callback(pygame.K_d, move_right)
-
-        #self.position.body.moment = float("inf")

@@ -2,7 +2,7 @@ state:
   idle:
     frames:
       - {image: player_run_0, duration: 0.5}
-      - {image: player_run_2, duration: 0.5}
+      - {image: player_run_3, duration: 0.5}
     loop: true
 
   run:

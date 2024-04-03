@@ -7,6 +7,7 @@ from isec.environment.scene import EntityScene, OrthogonalTilemapScene
 from isec.environment.terrain import TerrainCollision
 
 from game.entities.player import Player
+from game.entities.base_enemy import BaseEnemy
 from game.entities.shape_info import TerrainShapeInfo
 from game.entities.blob import Blob
 
@@ -29,13 +30,15 @@ class Level:
         self.create_level(phase)
 
         # Entities
-        self.player = Player(pygame.Vector2(100, 100))
-        self.enemies: list[Entity] = []
-        self.blob = Blob(pygame.Vector2(100, 100))
-        self.entity_scene.add_entities(self.player, self.player.primary, *self.enemies, self.blob)
+        self.player = Player(self.entity_scene, pygame.Vector2(100, 100))
+        self.enemies: list[BaseEnemy] = [Blob(self.entity_scene, pygame.Vector2(100+i, 100)) for i in range(500)]
+        self.entity_scene.add_entities(self.player, self.player.primary, *self.enemies)
 
     def update(self) -> None:
-        self.blob.set_target(tuple(self.player.position.position))
+        for i, enemy in enumerate(self.enemies):
+            enemy.no = i
+            enemy.set_target(tuple(self.player.position.position))
+
         delta = self.linked_instance.delta
         self.entity_scene.update(delta)
         self.entity_scene.camera.position.x = self.player.position.x-200
@@ -66,5 +69,4 @@ class Level:
 
     def add_callbacks(self):
         self.player.add_callbacks(self.linked_instance)
-        self.linked_instance.event_handler.register_callback("click", "down", LoopHandler.stop_game)
-        print(self.linked_instance.event_handler._mouse_cbs)
+        self.linked_instance.event_handler.register_callback("quit", "down", LoopHandler.stop_game)

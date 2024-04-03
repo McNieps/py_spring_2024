@@ -2,7 +2,7 @@ import pygame
 import typing
 
 from isec.app import Resource
-from isec.environment import Pos, Sprite, Entity
+from isec.environment import Pos, Sprite, Entity, EntityScene
 from isec.environment.position.pymunk_pos import PymunkPos, PymunkShapeInfo
 
 
@@ -10,11 +10,12 @@ class GameEntity(Entity):
     BASE_ATTRIBUTES = {}
 
     def __init__(self,
+                 scene: EntityScene,
                  position: Pos,
                  sprite: Sprite) -> None:
 
         super().__init__(position, sprite)
-
+        self.scene = scene
         self.target_pos: pygame.Vector2 | None = None
         self.attributes = self.load_attributes()
 

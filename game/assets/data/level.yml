@@ -1,12 +1,20 @@
 phase_1:
-  duration: 240
   terrain:
     - {tilemap: [data, tilemaps, phase_1_0], solid: false}
     - {tilemap: [data, tilemaps, phase_1_1], solid: true}
     - {tilemap: [data, tilemaps, phase_1_2], solid: true}
 
+  enemies:
+    - {time: 0, enemies: {Blob: 4}, every: 5}
+    - {time: 30, enemies: {Blob: 6}, every: 5}  # 1 min
+    - {time: 60, enemies: {Blob: 6}, every: 5}
+    - {time: 90, enemies: {Blob: 6}, every: 5}  # 2 min
+    - {time: 120, enemies: {Blob: 6}, every: 5}
+    - {time: 180, enemies: {Blob: 6}, every: 5}  # 3 min
+    - {time: 240, enemies: {Blob: 6}, every: 5}
+    - {time: 300, enemies: {Blob: 6}, every: -1}  # 4 min
+
 phase_2:
-  duration: 240
   terrain:
     - [data, tilemaps, phase_2_0]
     - [data, tilemaps, phase_2_1]

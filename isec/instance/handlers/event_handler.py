@@ -72,7 +72,6 @@ class EventHandler:
                 continue
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                print(event)
                 await self._handle_mouse("down", event.button)
                 continue
 
@@ -90,7 +89,7 @@ class EventHandler:
 
         button_pressed = pygame.mouse.get_pressed(5)
         for action in self._mouse_cbs:
-            if not button_pressed[self._mouse_cbs[action]["key"]]:
+            if not button_pressed[self._mouse_cbs[action]["key"]-1]:
                 continue
             for callback in self._mouse_cbs[action]["callbacks"]["pressed"]:
                 await callback()

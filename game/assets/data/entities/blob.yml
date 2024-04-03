@@ -4,9 +4,11 @@ position:
   mass: 1
   moment: inf
 
+
 sprite:
   anchor: midbottom
 
 attributes:
+  health: 20
   speed: 600
   air_resistance: 0.002  # Of base speed conserved each sec

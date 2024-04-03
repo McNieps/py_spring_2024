@@ -1,2 +1,14 @@
-type: swing
-offset:
+base:
+  damage: 10
+  speed: 0  # in px/s
+  radius: 45  # in px
+  duration: 0.2  # in seconds
+  knockback: 300 # in N.s
+  pierce: -1
+
+animation:
+  fade: 0.5  # fade out when time reach "fade" % of duration
+  radius: 28  # in px
+  max_width: 8 #  in px
+
+swing_arc_length: 160  # in degrees and should scale with duration

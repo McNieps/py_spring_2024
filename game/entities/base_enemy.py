@@ -1,18 +1,22 @@
 import pygame
 
-from isec.environment import Pos, Sprite, Entity
+from isec.app import Resource
+from isec.environment import Pos, Sprite, Entity, EntityScene
 
 from game.entities.game_entity import GameEntity
 
 
 class BaseEnemy(GameEntity):
     def __init__(self,
+                 scene: EntityScene,
                  sprite: Sprite,
                  position: Pos) -> None:
 
-        super().__init__(position, sprite)
-
+        super().__init__(scene, position, sprite)
+        self.dict = Resource.data["entities"][self.__class__.__name__.lower()]
         self.target_pos: pygame.Vector2 | None = None
+
+        self.hp = self.attributes["health"]
 
     def set_target(self,
                    target: tuple[float, float] | Entity | Pos | pygame.Vector2):
@@ -37,6 +41,17 @@ class BaseEnemy(GameEntity):
                delta: float) -> None:
 
         return
+
+    def hit(self,
+            damage: int) -> bool:
+
+        self.hp -= damage
+
+        if self.hp <= 0:
+            self.destroy()
+            return True
+
+        return False
 
     def walk_toward_target(self) -> None:
 

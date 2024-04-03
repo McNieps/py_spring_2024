@@ -1,14 +1,22 @@
 state:
   idle:
     frames:
-      - {image: player_run_0, duration: 0.5}
-      - {image: player_run_3, duration: 0.5}
+      - {image: run_0, duration: 0.5}
+      - {image: run_3, duration: 0.5}
     loop: true
 
   run:
     frames:
-      - {image: player_run_0, duration: 0.15}
-      - {image: player_run_1, duration: 0.15}
-      - {image: player_run_2, duration: 0.15}
-      - {image: player_run_3, duration: 0.15}
+      - {image: run_0, duration: 0.15}
+      - {image: run_1, duration: 0.15}
+      - {image: run_2, duration: 0.15}
+      - {image: run_3, duration: 0.15}
     loop: true
+
+  roll:
+    frames:
+      - {image: roll_0, duration: 0.075}
+      - {image: roll_1, duration: 0.075}
+      - {image: roll_2, duration: 0.075}
+      - {image: roll_3, duration: 0.075}
+    loop: false

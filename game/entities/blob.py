@@ -1,7 +1,7 @@
 import pygame
 
 from isec.app import Resource
-from isec.environment import Sprite
+from isec.environment import Sprite, EntityScene
 
 from game.entities.shape_info import EnemyShapeInfo
 from game.entities.base_enemy import BaseEnemy
@@ -9,6 +9,7 @@ from game.entities.base_enemy import BaseEnemy
 
 class Blob(BaseEnemy):
     def __init__(self,
+                 scene: EntityScene,
                  position: pygame.Vector2) -> None:
 
         sprite = Sprite(Resource.image["sprite"]["enemies"]["blob"],
@@ -18,7 +19,7 @@ class Blob(BaseEnemy):
 
         position = self.create_position(position, EnemyShapeInfo)
 
-        super().__init__(sprite, position)
+        super().__init__(scene, sprite, position)
 
     def update(self,
                delta: float) -> None:

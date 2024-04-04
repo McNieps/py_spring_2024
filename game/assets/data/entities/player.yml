@@ -9,10 +9,11 @@ sprite:
   anchor: [7, 25]
 
 attributes:
-  hp: 100
-  base_speed: 1000
+  health: 10
+  health_regen: 0
   speed: 1000
   air_resistance: 0.001  # Of base speed conserved each sec
   dodge_duration: 0.4  # ms
   dodge_impulse: 100  # N.s
+  dodge_period: 4  # s
   pickup_range: 25 # in px

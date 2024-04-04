@@ -20,7 +20,6 @@ class HealthBar(Entity):
                delta: float) -> None:
         self.sprite.surface.fill((57, 57, 57))
 
-        health_percentage = self.player.hp / self.player.hp_to_max
-
+        health_percentage = self.player.current_health / self.player.attributes["health"]
         rect = pygame.Rect((0, 0), (self.size[0]*health_percentage, self.size[1]))
         pygame.draw.rect(self.sprite.surface, (187, 127, 87), rect)

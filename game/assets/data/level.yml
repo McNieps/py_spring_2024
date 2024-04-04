@@ -5,16 +5,13 @@ phase_1:
     - {tilemap: [data, tilemaps, phase_1_2], solid: true}
 
   waves:
-    - {time: 15, entities: {Peanut: 1}, every: 1, zone: near}
-    - {time: 30, entities: {Gummy: 1, Peanut: 1}, every: 2, zone: near}
-    # - {time: 61, entities: {Peanut: 50}, every: 2, zone: near}
-    # - {time: 150, entities: {Gummy: 5}, every: 2, zone: near}
-    # - {time: 180, entities: {Gummy: 6}, every: 2, zone: near}
-    # - {time: 240, entities: {Gummy: 7}, every: 2, zone: near}
-    # - {time: 300, entities: {Gummy: 8, XPChunk: 0}, every: 0.1, zone: [512, 512]}
-
-phase_2:
-  terrain:
-    - [data, tilemaps, phase_2_0]
-    - [data, tilemaps, phase_2_1]
-    - [data, tilemaps, phase_2_2]
+    - {time: 15, entities: {Gummy: 1}, every: 4, zone: near}
+    - {time: 30, entities: {Gummy: 1}, every: 2.5, zone: near}
+    - {time: 31, entities: {Peanut: 4}, every: 4, zone: near}
+    - {time: 32, entities: {XPChunk: 40}, every: 4, zone: near}
+    - {time: 45, entities: {Gummy: 2}, every: 2, zone: near}
+    - {time: 60, entities: {Gummy: 3}, every: 2, zone: near}
+    - {time: 75, entities: {Gummy: 4, Peanut: 1}, every: 2.5, zone: near}
+    - {time: 76, entities: {Peanut: 10}, every: 10, zone: [512, 512]}
+    - {time: 77, entities: {XPChunk: 40}, every: 10, zone: near}
+    - {time: 300, entities: {XPChunk: 1}, every: 0.1, zone: [512, 512]}

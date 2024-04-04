@@ -22,7 +22,7 @@ class BaseEnemy(GameEntity):
         self.dict = Resource.data["entities"][self.__class__.__name__.lower()]
         self.target_pos: pygame.Vector2 | None = None
 
-        self.hp = self.attributes["hp"]
+        self.hp = self.attributes["health"]
 
     def set_target(self,
                    target: tuple[float, float] | Entity | Pos | pygame.Vector2):

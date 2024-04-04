@@ -11,3 +11,6 @@ InstanceGame:
   primary: {key: B_1}
   secondary: {key: B_3}
   dodge: {key: K_SPACE}
+
+InstanceItemSelection:
+  click: {key: B_1}

@@ -20,7 +20,7 @@ class GameEntity(Entity):
         self.target_pos: pygame.Vector2 | None = None
         self.attributes = self.load_attributes()
 
-        self.hp = self.attributes["hp"]
+        self.hp = self.attributes["health"]
 
     def set_target(self,
                    target: tuple[float, float] | Entity | Pos):

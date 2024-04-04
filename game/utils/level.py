@@ -44,8 +44,7 @@ class Level:
         self.entity_scene.add_entities(self.player, self.player.primary, *self.enemies)
 
     def update(self) -> None:
-        delta = self.linked_instance.delta
-
+        delta = 0 if self.player.current_health <= 0 else self.linked_instance.delta
         self.add_entities(*self.spawner.update(delta))
 
         for enemy in self.enemies:

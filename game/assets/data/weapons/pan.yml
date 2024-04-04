@@ -1,10 +1,10 @@
 # Attributes
 damage: 5
-speed: 0  # in px/s
+speed: 100  # in px/s
 radius: 45  # in px
 duration: 0.2  # in seconds
 knockback: 250  # in N.s
-max_hit: -1
+max_hit: 2
 attack_period: 0.75
 swing_arc_length: 160  # in degrees and should scale with duration
 

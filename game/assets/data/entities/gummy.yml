@@ -9,6 +9,7 @@ sprite:
 
 attributes:
   xp: 2
-  hp: 20
-  speed: 600
+  health: 20
+  speed: 450
+  attack_period: 3
   air_resistance: 0.002  # Of base speed conserved each sec

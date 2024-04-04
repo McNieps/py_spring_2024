@@ -6,6 +6,7 @@ class BaseItem:
                  level: Level) -> None:
         self.level = level
         self.player = level.player
+        self.primary = self.player.primary
 
     def on_update(self) -> None:
         """Update effects go here"""

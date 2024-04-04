@@ -20,14 +20,16 @@ class GUI(EntityScene):
         super().__init__(fps=Resource.data["instance"]["game"]["fps"])
 
         self.level = level
-
-        frame = Entity(Pos(), Sprite(Resource.image["gui"]["frame"], position_anchor="topleft"))
+        self.frame = Entity(Pos(), Sprite(Resource.image["gui"]["frame"], position_anchor="topleft"))
         self.add_entities(XPBar(self.level),
                           HealthBar(self.level),
                           ChunkCounter(self.level),
                           LevelCounter(self.level),
-                          frame)
+                          self.frame)
 
     def update(self,
                _delta: float = 0) -> None:
         super().update(_delta)
+
+        if self.level.player.current_health <= 0:
+            self.frame.sprite.surface = Resource.image["gui"]["death_screen"]

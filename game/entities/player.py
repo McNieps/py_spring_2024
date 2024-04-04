@@ -1,3 +1,4 @@
+import math
 import pygame
 
 from isec.app import Resource
@@ -31,13 +32,26 @@ class Player(GameEntity):
         self.xp_level = 0
         self.xp_chunks = 0
 
-        self.hp = 10
-        self.hp_to_max = 15
-        self.xp = 1
+        self.current_health = self.attributes["health"]
+
+        self.xp = 0
         self.xp_to_max = 10
+        self.level_to_award = 0
+
+        self.items = []
+        self.health_fraction = 0
+        self.time_since_last_dodge = 999
 
     def update(self,
                delta: float) -> None:
+
+        self.health_fraction += self.attributes["health_regen"] * delta
+        if self.current_health == self.attributes["health"]:
+            self.health_fraction = 0
+        else:
+            if math.floor(self.health_fraction) > 0:
+                self.current_health += 1
+                self.health_fraction -= 1
 
         self.sprite.update(delta)
         self.handle_actions(delta)
@@ -56,6 +70,7 @@ class Player(GameEntity):
             self.state["state"] = ""
             self.state["time_left"] = 0
 
+        self.time_since_last_dodge += delta
         self.position.speed *= self.attributes["air_resistance"] ** delta
 
         move_vec = (pygame.Vector2(1, 0) * (self.events["right"]["pressed"] - self.events["left"]["pressed"]) +
@@ -88,6 +103,10 @@ class Player(GameEntity):
             self.start_dodge()
 
     def start_dodge(self):
+        if self.time_since_last_dodge < self.attributes["dodge_period"]:
+            return
+
+        self.time_since_last_dodge = 0
         self.state["state"] = "dodge"
         self.state["time_left"] = self.attributes["dodge_duration"]
         self.sprite.switch_state("roll")
@@ -138,19 +157,25 @@ class Player(GameEntity):
             self.xp_level += 1
             self.xp -= self.xp_to_max
             self.xp_to_max += 2
+            self.level_to_award += 1
             self.gain_xp(0)
+            self.current_health = min(self.current_health+1, self.attributes["health"])
             Resource.sound["effects"]["level_up"].play()
 
     def hit(self,
             damage: float) -> bool:
-        print("hello")
+
         if self.state["state"]:
             print("nice try pal")
             return False
 
-        if self.hp < 0:
+        if self.current_health < 0:
             return False
 
         Resource.sound["effects"]["hit"].play()
-        self.hp -= damage
+        self.current_health -= damage
         return True
+
+    def add_item(self, item) -> None:
+        self.items.append(item)
+        item.on_equip()

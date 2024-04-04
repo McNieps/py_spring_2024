@@ -13,8 +13,12 @@ class BaseProjectile(Entity):
                  position: Pos,
                  sprite: Sprite) -> None:
 
+        if aim_vec.length() == 0:
+            aim_vec = pygame.Vector2(1, 0)
+
         super().__init__(position, sprite)
         self.aim_vec = aim_vec
+
         self.linked_weapon = linked_weapon
         self.attributes = self.linked_weapon.attributes
         self.hit_entities = set()

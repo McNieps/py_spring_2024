@@ -9,5 +9,6 @@ class ItemLead(BaseItem):
         super().__init__(level)
 
     def on_equip(self):
-        pass
-
+        self.primary.attributes["damage"] += 2
+        self.primary.attributes["attack_period"] *= 1.25
+        self.primary.attributes["knockback"] *= 1.25

@@ -5,7 +5,7 @@ base:
   duration: 0.2  # in seconds
   knockback: 250  # in N.s
   max_hit: -1
-  period: 0.75
+  attack_period: 0.75
 
 animation:
   fade: 0.5  # fade out when time reach "fade" % of duration

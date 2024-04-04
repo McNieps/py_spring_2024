@@ -163,7 +163,7 @@ class Pan(BaseWeapon):
     def attack(self,
                aim_vec: pygame.Vector2):
 
-        if self.time_since_last_attack < Resource.data["weapons"]["pan"]["base"]["period"]:
+        if self.time_since_last_attack < Resource.data["weapons"]["pan"]["base"]["attack_period"]:
             return
 
         self.time_since_last_attack = 0

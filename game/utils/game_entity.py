@@ -40,11 +40,7 @@ class GameEntity(Entity):
     def update(self,
                delta: float) -> None:
 
-        if self.target_pos is not None:
-            move_vec = self.target_pos - self.position.position
-            if move_vec.length() > 0:
-                move_vec.scale_to_length(self.attributes["speed"])
-                self.position.body.apply_force_at_local_point(move_vec)
+        super().update(delta)
 
     def hit(self,
             damage: float) -> bool:

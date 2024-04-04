@@ -29,6 +29,10 @@ class StateSprite(AnimatedSprite):
                          blit_flag,
                          position_anchor)
 
+    def reset_animation(self):
+        self._current_frame: int = 0
+        self._current_duration: float = 0.0
+
     def switch_state(self,
                      state_name: str) -> None:
 
@@ -38,8 +42,7 @@ class StateSprite(AnimatedSprite):
             raise IndexError(err_msg)
 
         if state_name != self.current_state:
-            self._current_frame: int = 0
-            self._current_duration: float = 0.0
+            self.reset_animation()
 
         self.current_state = state_name
         self.frames_duration = self.states[state_name]["frames_duration"]

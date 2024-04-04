@@ -94,7 +94,6 @@ class PymunkPos(Pos):
         self.space.add(self.body, *self.shapes)
 
     def remove_from_space(self) -> None:
-        print("i")
         self.space.remove(self.body, *self.shapes)
 
     def create_rect_shape(self,

@@ -1,0 +1,13 @@
+state:
+  idle:
+    loop: true
+    frames:
+      - {image: idle_0, duration: 1}
+
+  attack:
+    loop: true
+    frames:
+      - {image: attack_0, duration: 0.05}
+      - {image: attack_1, duration: 0.05}
+      - {image: attack_2, duration: 0.05}
+      - {image: attack_3, duration: 0.05}

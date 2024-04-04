@@ -134,10 +134,12 @@ class Pan(BaseWeapon):
         self.projectiles_to_spawn = []
         self.sound = None
         self.animation_angle = 0
+        self.time_since_last_attack = 1000
 
     def update(self,
                delta: float) -> None:
 
+        self.time_since_last_attack += delta
         self.animation_angle *= 0.01 ** delta
 
         if self.sprite.displayed:
@@ -161,6 +163,10 @@ class Pan(BaseWeapon):
     def attack(self,
                aim_vec: pygame.Vector2):
 
+        if self.time_since_last_attack < Resource.data["weapons"]["pan"]["base"]["period"]:
+            return
+
+        self.time_since_last_attack = 0
         self.sound = Resource.sound["weapons"]["pan_swing"].play()
         self.projectiles_to_spawn.append(PanProjectile(self,
                                                        aim_vec,

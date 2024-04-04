@@ -1,14 +1,14 @@
 position:
   shape: circle
-  radius: 10
+  radius: 5
   mass: 1
   moment: inf
-
 
 sprite:
   anchor: midbottom
 
 attributes:
-  hp: 20
-  speed: 600
+  xp: 3
+  hp: 10
+  speed: 400
   air_resistance: 0.002  # Of base speed conserved each sec

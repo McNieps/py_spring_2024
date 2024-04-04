@@ -5,14 +5,13 @@ phase_1:
     - {tilemap: [data, tilemaps, phase_1_2], solid: true}
 
   waves:
-    - {time: 0, entities: {Blob: 1}, every: 2, zone: near}
-    - {time: 30, entities: {Blob: 2}, every: 2, zone: near}  # 1 min
-    - {time: 60, entities: {Blob: 3}, every: 2, zone: near}
-    - {time: 90, entities: {Blob: 4}, every: 2, zone: near}  # 2 min
-    - {time: 120, entities: {Blob: 5}, every: 2, zone: near}
-    - {time: 180, entities: {Blob: 6}, every: 2, zone: near}  # 3 min
-    - {time: 240, entities: {Blob: 7}, every: 2, zone: near}
-    - {time: 300, entities: {Blob: 8, XPChunk: 0}, every: 0.1, zone: [512, 512]}  # 4 min
+    - {time: 15, entities: {Peanut: 1}, every: 1, zone: near}
+    - {time: 30, entities: {Gummy: 1, Peanut: 1}, every: 2, zone: near}
+    # - {time: 61, entities: {Peanut: 50}, every: 2, zone: near}
+    # - {time: 150, entities: {Gummy: 5}, every: 2, zone: near}
+    # - {time: 180, entities: {Gummy: 6}, every: 2, zone: near}
+    # - {time: 240, entities: {Gummy: 7}, every: 2, zone: near}
+    # - {time: 300, entities: {Gummy: 8, XPChunk: 0}, every: 0.1, zone: [512, 512]}
 
 phase_2:
   terrain:

@@ -11,6 +11,8 @@ if typing.TYPE_CHECKING:
 
 
 class BaseEnemy(GameEntity):
+    BASE_ATTRIBUTES = {}
+
     def __init__(self,
                  level: "Level",
                  sprite: Sprite,

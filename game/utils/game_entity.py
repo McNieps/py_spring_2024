@@ -10,8 +10,6 @@ if typing.TYPE_CHECKING:
 
 
 class GameEntity(Entity):
-    BASE_ATTRIBUTES = {}
-
     def __init__(self,
                  position: Pos,
                  sprite: Sprite,

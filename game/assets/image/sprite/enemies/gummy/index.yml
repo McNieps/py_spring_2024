@@ -1,0 +1,5 @@
+state:
+  idle:
+    frames:
+      - {image: idle_0, duration: 1}
+    loop: true

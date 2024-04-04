@@ -1,4 +1,6 @@
 import math
+import pygame
+import random
 
 from isec.app import Resource
 
@@ -6,13 +8,14 @@ from isec.environment import Entity, Sprite
 from isec.environment.position import SimplePos
 
 from game.utils.level import Level
+from game.entities.flame_particle import FlameParticle
 
 
 class Campfire(Entity):
     def __init__(self,
                  level: Level) -> None:
 
-        position = SimplePos((512, 512))
+        position = SimplePos((512, 512-50))
         sprite = Sprite(Resource.image["sprite"]["misc"]["campfire"])
         super().__init__(position, sprite)
 
@@ -22,15 +25,45 @@ class Campfire(Entity):
         self.can_convert = 0
         self.rate = 0
 
+        self.flame_period = 1/50
+        self.last_flame = 0
+
+        self.range_indicator_period = 1
+        self.last_range_indicator = 0
+
     def update(self,
                delta: float) -> None:
 
-        vec = self.level.player.position.position - self.position.position
+        self.passive_flame(delta)
+        self.range_indicator(delta)
+
+        vec = self.level.player.position.position - (512, 512)
         if vec.length() > Resource.data["entities"]["campfire"]["range"]:
             self.player_leave()
             return
 
         self.player_in_range(delta)
+
+    def passive_flame(self,
+                      delta: float) -> None:
+        self.last_flame += delta
+        if self.last_flame > self.flame_period:
+            self.level.add_entities(FlameParticle(1))
+            self.last_flame -= self.flame_period
+            self.passive_flame(0)
+
+    def range_indicator(self,
+                        delta: float) -> None:
+        self.last_range_indicator += delta
+        if self.last_range_indicator > self.range_indicator_period:
+            self.last_range_indicator -= self.range_indicator_period
+            number_of_indicators = 20
+            angle_step = 360/number_of_indicators
+            angle_offset = random.random()*angle_step
+            vec = pygame.Vector2(Resource.data["entities"]["campfire"]["range"], 0)
+            for i in range(number_of_indicators):
+                new_vec = pygame.Vector2(512, 512) + vec.rotate(angle_offset+i*angle_step)
+                self.level.add_entities(FlameParticle(10.5, new_vec, 0.2))
 
     def player_in_range(self, delta):
         self.is_in_range = True
@@ -57,6 +90,9 @@ class Campfire(Entity):
         self.level.player.xp_chunks -= consumable_chunks
         sound_value = int(min(self.rate/10, 5))
         Resource.sound["effects"][f"xp_convert_{sound_value}"].play()
+
+        for _ in range(consumable_chunks*10):
+            self.level.add_entities(FlameParticle(self.rate))
 
     def player_leave(self):
         self.is_in_range = False

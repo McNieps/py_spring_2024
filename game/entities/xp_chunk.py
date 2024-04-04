@@ -1,4 +1,6 @@
 import random
+import math
+import pygame
 
 from isec.app import Resource
 
@@ -13,7 +15,9 @@ class XPChunk(Entity):
                  level: Level,
                  position: tuple[float, float]) -> None:
 
-        position = SimplePos(position)
+        position_vec = pygame.Vector2(random.random()*5, 0).rotate(random.randint(0, 359)) + position
+
+        position = SimplePos((math.floor(position_vec.x), math.floor(position_vec.y)))
         sprite = Sprite(Resource.image["sprite"]["misc"][f"xp_chunk_{random.randint(0, 3)}"])
         super().__init__(position, sprite)
 

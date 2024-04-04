@@ -8,11 +8,11 @@
     ],
     "fileStates": {
         "phase_1.tmx": {
-            "scale": 3,
+            "scale": 1.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 485.5,
-                "y": 614.5
+                "x": 549,
+                "y": 579
             }
         },
         "tileset.tsx": {

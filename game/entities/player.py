@@ -12,7 +12,7 @@ from game.weapons.pan import Pan
 class Player(GameEntity):
     def __init__(self) -> None:
 
-        position = self.create_position(pygame.Vector2(64, 64), PlayerShapeInfo)
+        position = self.create_position(pygame.Vector2(512, 564), PlayerShapeInfo)
         sprite = StateSprite.create_from_directory("sprite/player",
                                                    "static",
                                                    0,
@@ -29,7 +29,7 @@ class Player(GameEntity):
         self.primary = Pan(self)
 
         self.xp_level = 0
-        self.xp_chunks = 1000
+        self.xp_chunks = 0
 
         self.hp = 10
         self.hp_to_max = 15
@@ -129,9 +129,14 @@ class Player(GameEntity):
         instance.event_handler.register_callback("down", "pressed", move_down)
         instance.event_handler.register_callback("left", "pressed", move_left)
         instance.event_handler.register_callback("right", "pressed", move_right)
-        instance.event_handler.register_callback("primary", "down", attack_primary)
+        instance.event_handler.register_callback("primary", "pressed", attack_primary)
         instance.event_handler.register_callback("dodge", "down", dodge)
 
     def gain_xp(self, xp_amount: int) -> None:
         self.xp += xp_amount
-        pass
+        if self.xp >= self.xp_to_max:
+            self.xp_level += 1
+            self.xp -= self.xp_to_max
+            self.xp_to_max += 2
+            self.gain_xp(0)
+            Resource.sound["effects"]["level_up"].play()

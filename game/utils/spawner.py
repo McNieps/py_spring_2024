@@ -19,7 +19,7 @@ class Spawner:
         self.level = level
         self.spawnable_entities = spawnable_entities
         self.waves = Resource.data["level"][level.phase]["waves"]
-        self._time = 300
+        self._time = 0
         self._time_since_last_spawn = 0
         self._current_wave_index = 0
         self._max_wave_index = len(self.waves)-1
@@ -43,7 +43,6 @@ class Spawner:
 
         self._current_wave_index += 1
         self._current_wave = self.waves[self._current_wave_index]
-        print(self._current_wave)
         self.update_wave()
 
     def handle_spawn(self) -> list[GameEntity]:
@@ -72,7 +71,8 @@ class Spawner:
 
         if isinstance(zone, str):
             if zone == "near":
-                return tuple(self.level.player.position.position.rotate(random.randint(0, 360)))
-                d
+                spawn_vec = self.level.player.position.position + pygame.Vector2(500, 0).rotate(random.randint(0, 360))
+                return tuple(spawn_vec)
+
         err_msg = f"Invalid zone argument: {self._current_wave['zone']}"
         raise Exception(err_msg)

@@ -29,7 +29,7 @@ class Player(GameEntity):
         self.primary = Pan(self)
 
         self.xp_level = 0
-        self.xp_chunks = 0
+        self.xp_chunks = 1000
 
         self.hp = 10
         self.hp_to_max = 15
@@ -131,3 +131,7 @@ class Player(GameEntity):
         instance.event_handler.register_callback("right", "pressed", move_right)
         instance.event_handler.register_callback("primary", "down", attack_primary)
         instance.event_handler.register_callback("dodge", "down", dodge)
+
+    def gain_xp(self, xp_amount: int) -> None:
+        self.xp += xp_amount
+        pass

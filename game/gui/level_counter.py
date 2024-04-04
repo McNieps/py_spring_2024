@@ -6,21 +6,24 @@ from isec.environment.position import SimplePos
 from game.utils.level import Level
 
 
-class XPBar(Entity):
+class LevelCounter(Entity):
     def __init__(self,
                  level: Level) -> None:
-        self.player = level.player
-        self.size = (5, 250)
-        position = SimplePos((391, 46))
-        sprite = Sprite(pygame.Surface(self.size, pygame.SRCALPHA), position_anchor="topleft")
 
+        self.player = level.player
+        self.size = (58, 15)
+        position = SimplePos((334, 27))
+        sprite = Sprite(pygame.Surface(self.size, pygame.SRCALPHA), position_anchor="topleft")
+        self.font = pygame.font.Font("game/assets/font/owre_kynge.ttf", 15)
         super().__init__(position, sprite)
 
     def update(self,
                delta: float) -> None:
 
         self.sprite.surface.fill((57, 57, 57))
+        text_surf = self.font.render(str(self.player.xp_level), False, (246, 205, 38))
+        # text_surf = self.font.render("2%", False, (246, 205, 38))
+        text_rect = text_surf.get_rect()
+        text_rect.center = self.size[0]/2, self.size[1]/2+1
 
-        xp_remaining_percentage = 1-self.player.xp / self.player.xp_to_max
-        rect = pygame.Rect((0, round(self.size[1]*xp_remaining_percentage)), self.size)
-        pygame.draw.rect(self.sprite.surface, (246, 205, 38), rect)
+        self.sprite.surface.blit(text_surf, text_rect)

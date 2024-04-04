@@ -14,7 +14,7 @@ class XPChunk(Entity):
                  position: tuple[float, float]) -> None:
 
         position = SimplePos(position)
-        sprite = Sprite(Resource.image["sprite"]["xp"][f"xp_chunk_{random.randint(0, 3)}"])
+        sprite = Sprite(Resource.image["sprite"]["misc"][f"xp_chunk_{random.randint(0, 3)}"])
         super().__init__(position, sprite)
 
         self.level = level

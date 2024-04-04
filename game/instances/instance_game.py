@@ -4,7 +4,7 @@ from isec.instance import BaseInstance, LoopHandler
 from game.gui import GUI
 from game.utils import Level
 
-from game.entities import entities, Player
+from game.entities import entities, Player, Campfire
 
 
 class InstanceGame(BaseInstance):
@@ -13,6 +13,7 @@ class InstanceGame(BaseInstance):
         self.level = Level(Player(), self, entities)
         self.level.add_callbacks()
         self.gui = GUI(self.level)
+        self.level.add_entities(Campfire(self.level))
 
     async def loop(self):
         LoopHandler.fps_caption()

@@ -39,7 +39,7 @@ class EntityScene(Scene):
         for entity in entities:
             if entity not in self.entities:
                 continue
-
+            print("i")
             if isinstance(entity.position, PymunkPos):
                 entity.position.remove_from_space()
 
@@ -60,7 +60,8 @@ class EntityScene(Scene):
 
         for entity in reversed(self.entities):
             if entity.to_delete:
-                self.entities.remove(entity)
+                self.remove_entities(entity)
+                # self.entities.remove(entity)
 
         self.space.step(self.avg_delta)
 

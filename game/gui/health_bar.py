@@ -6,21 +6,21 @@ from isec.environment.position import SimplePos
 from game.entities.player import Player
 
 
-class XPBar(Entity):
+class HealthBar(Entity):
     def __init__(self,
                  player: Player) -> None:
         self.player = player
-        self.size = (5, 250)
-        position = SimplePos((391, 46))
+        self.size = (385, 5)
+        position = SimplePos((4, 291))
         sprite = Sprite(pygame.Surface(self.size, pygame.SRCALPHA), position_anchor="topleft")
 
         super().__init__(position, sprite)
 
     def update(self,
                delta: float) -> None:
-
         self.sprite.surface.fill((57, 57, 57))
 
-        xp_remaining_percentage = 1-self.player.xp / self.player.max_xp
-        rect = pygame.Rect((0, round(self.size[1]*xp_remaining_percentage)), self.size)
-        pygame.draw.rect(self.sprite.surface, (246, 205, 38), rect)
+        health_percentage = self.player.hp / self.player.hp_to_max
+
+        rect = pygame.Rect((0, 0), (self.size[0]*health_percentage, self.size[1]))
+        pygame.draw.rect(self.sprite.surface, (187, 127, 87), rect)

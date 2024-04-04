@@ -2,22 +2,27 @@ import pygame
 import typing
 
 from isec.app import Resource
-from isec.environment import Pos, Sprite, Entity, EntityScene
+from isec.environment import Pos, Sprite, Entity
 from isec.environment.position.pymunk_pos import PymunkPos, PymunkShapeInfo
+
+if typing.TYPE_CHECKING:
+    from game.utils.level import Level
 
 
 class GameEntity(Entity):
     BASE_ATTRIBUTES = {}
 
     def __init__(self,
-                 scene: EntityScene,
                  position: Pos,
-                 sprite: Sprite) -> None:
+                 sprite: Sprite,
+                 level: "Level" = None) -> None:
 
         super().__init__(position, sprite)
-        self.scene = scene
+        self.level = level
         self.target_pos: pygame.Vector2 | None = None
         self.attributes = self.load_attributes()
+
+        self.hp = self.attributes["hp"]
 
     def set_target(self,
                    target: tuple[float, float] | Entity | Pos):
@@ -42,6 +47,28 @@ class GameEntity(Entity):
             if move_vec.length() > 0:
                 move_vec.scale_to_length(self.attributes["speed"])
                 self.position.body.apply_force_at_local_point(move_vec)
+
+    def hit(self,
+            damage: float) -> bool:
+
+        self.on_hit(damage)
+
+        if self.hp > 0:
+            return False
+
+        self.kill()
+        return True
+
+    def kill(self):
+        self.on_death()
+        self.destroy()
+
+    def on_hit(self,
+               damage: float) -> None:
+        self.hp -= damage
+
+    def on_death(self) -> None:
+        pass
 
     @classmethod
     def create_position(cls,

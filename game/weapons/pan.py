@@ -7,8 +7,8 @@ from isec.app import Resource
 from isec.environment import Sprite
 from isec.environment.position import AdvancedPos, SimplePos
 
-from game.entities.game_entity import GameEntity
-from game.entities.base_enemy import BaseEnemy
+from game.utils.game_entity import GameEntity
+from game.utils.base_enemy import BaseEnemy
 from game.weapons.base_weapon import BaseWeapon, BaseProjectile
 
 
@@ -88,7 +88,7 @@ class PanProjectile(BaseProjectile):
         if len(self.hit_entities) == self.dict["base"]["max_hit"]:
             return
 
-        for enemy in self.linked_weapon.linked_entity.scene.entities:
+        for enemy in self.linked_weapon.linked_entity.level.entities:
             if len(self.hit_entities) == self.dict["base"]["max_hit"]:
                 return
 
@@ -104,7 +104,7 @@ class PanProjectile(BaseProjectile):
                 if min(raw_diff, 360 - raw_diff) < 15:
                     relative_pos.scale_to_length(self.dict["base"]["knockback"])
                     enemy.position.body.apply_impulse_at_local_point((tuple(relative_pos)))
-                    enemy.hit(self.dict["base"]["damage"])
+                    enemy_killed = enemy.hit(self.dict["base"]["damage"])
                     if self.sound is not None:
                         self.sound.play(Resource.sound["weapons"][f"pan_hit_{min(3, len(self.hit_entities))}"])
                     else:
@@ -155,7 +155,7 @@ class Pan(BaseWeapon):
                 self.position.x, self.position.y = self.linked_entity.position.x, self.linked_entity.position.y
 
         for attack in self.projectiles_to_spawn:
-            self.linked_entity.scene.add_entities(attack)
+            self.linked_entity.level.add_entities(attack)
         self.projectiles_to_spawn.clear()
 
     def attack(self,

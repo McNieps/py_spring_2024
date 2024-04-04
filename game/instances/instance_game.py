@@ -1,14 +1,16 @@
 from isec.app import Resource
 from isec.instance import BaseInstance, LoopHandler
 
-from game.tools import Level
-from game.tools.gui import GUI
+from game.gui import GUI
+from game.utils import Level
+
+from game.entities import entities, Player
 
 
 class InstanceGame(BaseInstance):
     def __init__(self):
         super().__init__(fps=Resource.data["instance"]["game"]["fps"])
-        self.level = Level(self)
+        self.level = Level(Player(), self, entities)
         self.level.add_callbacks()
         self.gui = GUI(self.level)
 

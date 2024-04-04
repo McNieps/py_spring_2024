@@ -3,7 +3,7 @@ import pygame
 from isec.app import Resource
 from isec.environment import Entity, Pos, Sprite
 
-from game.entities.game_entity import GameEntity
+from game.utils.game_entity import GameEntity
 
 
 class BaseProjectile(Entity):

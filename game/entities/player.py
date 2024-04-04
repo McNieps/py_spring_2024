@@ -3,25 +3,21 @@ import pygame
 from isec.app import Resource
 from isec.instance import BaseInstance
 from isec.environment.sprite import StateSprite
-from isec.environment import EntityScene
 
-from game.entities.game_entity import GameEntity
-from game.entities.shape_info import PlayerShapeInfo
+from game.utils.game_entity import GameEntity
+from game.utils.shape_info import PlayerShapeInfo
 from game.weapons.pan import Pan
 
 
 class Player(GameEntity):
-    def __init__(self,
-                 scene: EntityScene,
-                 position: pygame.Vector2) -> None:
+    def __init__(self) -> None:
 
-        position = self.create_position(position, PlayerShapeInfo)
+        position = self.create_position(pygame.Vector2(64, 64), PlayerShapeInfo)
         sprite = StateSprite.create_from_directory("sprite/player",
                                                    "static",
                                                    0,
                                                    Resource.data["entities"]["player"]["sprite"]["anchor"])
-        super().__init__(scene,
-                         position,
+        super().__init__(position,
                          sprite)
 
         # Inputs related
@@ -31,12 +27,14 @@ class Player(GameEntity):
         # Gameplay related
         self.state = {"state": "", "time_left": 0}
         self.primary = Pan(self)
-        self.secondary = Pan(self)
-        self.health = 10
-        self.max_health = 15
-        self.level = 0
+
+        self.xp_level = 0
+        self.xp_chunks = 0
+
+        self.hp = 10
+        self.hp_to_max = 15
         self.xp = 1
-        self.max_xp = 10
+        self.xp_to_max = 10
 
     def update(self,
                delta: float) -> None:
@@ -80,7 +78,7 @@ class Player(GameEntity):
         self.events = self.reset_events()
 
     def handle_actions(self,
-                       delta: float) -> None:
+                       _delta: float) -> None:
 
         aim_vec = -pygame.Vector2(200, 150) + pygame.mouse.get_pos()
         if self.events["primary"]["down"]:

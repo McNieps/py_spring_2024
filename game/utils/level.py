@@ -1,28 +1,35 @@
-import pygame.mouse
+import typing
 
 from isec.app import Resource
 from isec.instance import BaseInstance, LoopHandler
-from isec.environment.base import OrthogonalTilemap, Entity, Camera
+from isec.environment.base import OrthogonalTilemap, Camera, Entity
 from isec.environment.scene import EntityScene, OrthogonalTilemapScene
 from isec.environment.terrain import TerrainCollision
 
-from game.tools.spawner import Spawner
-from game.entities.player import Player
-from game.entities.base_enemy import BaseEnemy
-from game.entities.shape_info import TerrainShapeInfo
-from game.entities.blob import Blob
+from game.utils.base_enemy import BaseEnemy
+from game.utils.game_entity import GameEntity
+from game.utils.shape_info import TerrainShapeInfo
+
+from game.utils.spawner import Spawner
+if typing.TYPE_CHECKING:
+    from game.entities.player import Player
 
 
 class Level:
     def __init__(self,
+                 player: "Player",
                  linked_instance: BaseInstance,
+                 spawnable_entities: list[GameEntity],
                  phase: str = "phase_1") -> None:
 
         self.linked_instance = linked_instance
-        self.spawner = Spawner(Resource.data["level"][phase]["waves"])
-        tileset = OrthogonalTilemap.create_tileset_from_surface(Resource.image["tileset"], 32)
+
+        self.phase = phase
+
+        self.spawner = Spawner(spawnable_entities, self)
 
         # Scenes
+        tileset = OrthogonalTilemap.create_tileset_from_surface(Resource.image["tileset"], 32)
         self.camera = Camera()
         self.terrain_scenes = [OrthogonalTilemapScene(OrthogonalTilemap([[]], tileset), camera=self.camera),
                                OrthogonalTilemapScene(OrthogonalTilemap([[]], tileset), camera=self.camera),
@@ -31,14 +38,15 @@ class Level:
         self.create_level(phase)
 
         # Entities
-        self.player = Player(self.entity_scene, pygame.Vector2(100, 100))
-        self.enemies: list[BaseEnemy] = [Blob(self.entity_scene, pygame.Vector2(100+i, 100)) for i in range(100)]
+        self.player = player
+        self.player.level = self
+        self.enemies: list[BaseEnemy] = []
         self.entity_scene.add_entities(self.player, self.player.primary, *self.enemies)
 
     def update(self) -> None:
         delta = self.linked_instance.delta
 
-        self.spawner.update(delta)
+        self.add_entities(*self.spawner.update(delta))
 
         for enemy in self.enemies:
             enemy.set_target(tuple(self.player.position.position))
@@ -46,8 +54,6 @@ class Level:
 
         self.entity_scene.camera.position.x = self.player.position.x-200
         self.entity_scene.camera.position.y = self.player.position.y-150
-
-        pygame.image.save(self.linked_instance.window, "world.png", "png")
 
     def render(self) -> None:
         self.entity_scene.z_sort()
@@ -70,7 +76,12 @@ class Level:
                                                                               TerrainShapeInfo,
                                                                               show_collisions=False))
 
-        # Terrain collision
+    def add_entities(self, *entities: Entity):
+        self.entity_scene.add_entities(*entities)
+
+    @property
+    def entities(self) -> list[Entity]:
+        return self.entity_scene.entities
 
     def add_callbacks(self):
         self.player.add_callbacks(self.linked_instance)

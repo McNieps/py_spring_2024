@@ -4,7 +4,7 @@ phase_1:
     - {tilemap: [data, tilemaps, phase_1_1], solid: true}
     - {tilemap: [data, tilemaps, phase_1_2], solid: true}
 
-  enemies:
+  waves:
     - {time: 0, enemies: {Blob: 4}, every: 5}
     - {time: 30, enemies: {Blob: 6}, every: 5}  # 1 min
     - {time: 60, enemies: {Blob: 6}, every: 5}

@@ -1,5 +1,3 @@
-import typing
-
 import pygame
 
 from isec.app import Resource
@@ -34,6 +32,11 @@ class Player(GameEntity):
         self.state = {"state": "", "time_left": 0}
         self.primary = Pan(self)
         self.secondary = Pan(self)
+        self.health = 10
+        self.max_health = 15
+        self.level = 0
+        self.xp = 1
+        self.max_xp = 10
 
     def update(self,
                delta: float) -> None:
@@ -84,16 +87,12 @@ class Player(GameEntity):
             self.primary.attack(aim_vec)
 
         if self.events["dodge"]["down"]:
-            self.dodge()
+            self.start_dodge()
 
-    def dodge(self):
+    def start_dodge(self):
         self.state["state"] = "dodge"
         self.state["time_left"] = self.attributes["dodge_duration"]
         self.sprite.switch_state("roll")
-        self.position.body.speed = 0, 0
-        # for shape in self.position.body.shapes:
-        #     shape.collision_type = 3
-        #     shape.sensor = True
 
         impulse_vec = -pygame.Vector2(200, 150) + pygame.mouse.get_pos()
         impulse_vec.scale_to_length(self.attributes["dodge_impulse"])
@@ -134,6 +133,3 @@ class Player(GameEntity):
         instance.event_handler.register_callback("right", "pressed", move_right)
         instance.event_handler.register_callback("primary", "down", attack_primary)
         instance.event_handler.register_callback("dodge", "down", dodge)
-
-    def _create_callback(self) -> typing.Callable:
-        pass

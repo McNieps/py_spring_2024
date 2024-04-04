@@ -36,8 +36,11 @@ class StateSprite(AnimatedSprite):
             err_msg = (f"{state_name} is not a valid state name. "
                        f"Only these states are available for this sprite: {list(self.states.keys())}.")
             raise IndexError(err_msg)
-        self._current_frame: int = 0
-        self._current_duration: float = 0.0
+
+        if state_name != self.current_state:
+            self._current_frame: int = 0
+            self._current_duration: float = 0.0
+
         self.current_state = state_name
         self.frames_duration = self.states[state_name]["frames_duration"]
         self.loop = self.states[state_name]["loop"]

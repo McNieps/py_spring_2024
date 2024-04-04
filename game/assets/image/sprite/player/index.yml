@@ -15,8 +15,9 @@ state:
 
   roll:
     frames:
-      - {image: roll_0, duration: 0.075}
-      - {image: roll_1, duration: 0.075}
-      - {image: roll_2, duration: 0.075}
-      - {image: roll_3, duration: 0.075}
-    loop: false
+      - {image: roll_0, duration: 0.05}
+      - {image: roll_1, duration: 0.05}
+      - {image: roll_2, duration: 0.2}
+      - {image: roll_3, duration: 0.05}
+      - {image: roll_4, duration: 0.05}
+    loop: true

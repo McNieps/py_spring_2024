@@ -4,7 +4,7 @@ base:
   radius: 45  # in px
   duration: 0.2  # in seconds
   knockback: 300 # in N.s
-  pierce: -1
+  max_hit: -1
 
 animation:
   fade: 0.5  # fade out when time reach "fade" % of duration

@@ -55,14 +55,9 @@ class PanProjectile(BaseProjectile):
             return
 
         self.draw_effect(percent_in)
+        self.fade_effect(percent_in)
         self.linked_weapon.animation_angle = (percent_in-0.5) * self.dict["swing_arc_length"] * self.direction
         self.check_hits()
-
-        if self.dict["animation"]["fade"] != 0 and percent_in > self.dict["animation"]["fade"]:
-            max_fade_time = 1-self.dict["animation"]["fade"]
-            alpha = (1-(percent_in-self.dict["animation"]["fade"])/max_fade_time)*255
-            self.sprite.surface.set_alpha(alpha)
-            return
 
     def draw_effect(self,
                     percent_in: float) -> None:
@@ -80,8 +75,23 @@ class PanProjectile(BaseProjectile):
             point_size = int(self.dict["animation"]["max_width"]*pos_percentage)
             pygame.draw.circle(self.sprite.surface, (246, 205, 38), pos, point_size)
 
+    def fade_effect(self,
+                    percent_in: float) -> None:
+
+        if self.dict["animation"]["fade"] != 0 and percent_in > self.dict["animation"]["fade"]:
+            max_fade_time = 1-self.dict["animation"]["fade"]
+            alpha = (1-(percent_in-self.dict["animation"]["fade"])/max_fade_time)*255
+            self.sprite.surface.set_alpha(alpha)
+            return
+
     def check_hits(self) -> None:
+        if len(self.hit_entities) == self.dict["base"]["max_hit"]:
+            return
+
         for enemy in self.linked_weapon.linked_entity.scene.entities:
+            if len(self.hit_entities) == self.dict["base"]["max_hit"]:
+                return
+
             if not isinstance(enemy, BaseEnemy):
                 continue
 
@@ -100,8 +110,8 @@ class PanProjectile(BaseProjectile):
                     else:
                         self.sound = Resource.sound["weapons"][f"pan_hit_0"].play()
                     self.hit_entities.add(enemy)
-                    if enemy.to_delete:
-                        self.on_kill(enemy)
+                    # if enemy.to_delete:
+                    #     self.on_kill(enemy)
 
     def on_kill(self,
                 entity_killed: GameEntity) -> None:
@@ -110,7 +120,7 @@ class PanProjectile(BaseProjectile):
                                    self.aim_vec.copy(),
                                    entity_killed.position.position)
 
-        self.linked_weapon.attacks_to_spawn.append(new_attack)
+        self.linked_weapon.projectiles_to_spawn.append(new_attack)  # NOQA
 
 
 class Pan(BaseWeapon):
@@ -121,7 +131,7 @@ class Pan(BaseWeapon):
         sprite.displayed = True
         super().__init__(linked_entity, AdvancedPos((0, 0), a=0), sprite)
         self.linked_entity = linked_entity
-        self.attacks_to_spawn = []
+        self.projectiles_to_spawn = []
         self.sound = None
         self.animation_angle = 0
 
@@ -144,15 +154,14 @@ class Pan(BaseWeapon):
             else:
                 self.position.x, self.position.y = self.linked_entity.position.x, self.linked_entity.position.y
 
-        if self.attacks_to_spawn:
-            for attack in self.attacks_to_spawn:
-                self.linked_entity.scene.add_entities(attack)
-            self.attacks_to_spawn.clear()
+        for attack in self.projectiles_to_spawn:
+            self.linked_entity.scene.add_entities(attack)
+        self.projectiles_to_spawn.clear()
 
     def attack(self,
                aim_vec: pygame.Vector2):
 
         self.sound = Resource.sound["weapons"]["pan_swing"].play()
-        self.attacks_to_spawn.append(PanProjectile(self,
-                                                   aim_vec,
-                                                   self.linked_entity.position.position.copy()))
+        self.projectiles_to_spawn.append(PanProjectile(self,
+                                                       aim_vec,
+                                                       self.linked_entity.position.position.copy()))

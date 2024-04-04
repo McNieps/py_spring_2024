@@ -13,4 +13,4 @@ attributes:
   speed: 1000
   air_resistance: 0.001  # Of base speed conserved each sec
   dodge_duration: 0.4  # ms
-  dodge_impulse: 150  # N
+  dodge_impulse: 200  # N.s

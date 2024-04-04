@@ -1,6 +1,6 @@
 position:
   shape: circle
-  radius: 5
+  radius: 10
   mass: 1
   moment: inf
 

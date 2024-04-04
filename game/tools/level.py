@@ -6,6 +6,7 @@ from isec.environment.base import OrthogonalTilemap, Entity, Camera
 from isec.environment.scene import EntityScene, OrthogonalTilemapScene
 from isec.environment.terrain import TerrainCollision
 
+from game.tools.spawner import Spawner
 from game.entities.player import Player
 from game.entities.base_enemy import BaseEnemy
 from game.entities.shape_info import TerrainShapeInfo
@@ -18,7 +19,7 @@ class Level:
                  phase: str = "phase_1") -> None:
 
         self.linked_instance = linked_instance
-
+        self.spawner = Spawner(Resource.data["level"][phase]["waves"])
         tileset = OrthogonalTilemap.create_tileset_from_surface(Resource.image["tileset"], 32)
 
         # Scenes
@@ -31,18 +32,22 @@ class Level:
 
         # Entities
         self.player = Player(self.entity_scene, pygame.Vector2(100, 100))
-        self.enemies: list[BaseEnemy] = [Blob(self.entity_scene, pygame.Vector2(100+i, 100)) for i in range(500)]
+        self.enemies: list[BaseEnemy] = [Blob(self.entity_scene, pygame.Vector2(100+i, 100)) for i in range(100)]
         self.entity_scene.add_entities(self.player, self.player.primary, *self.enemies)
 
     def update(self) -> None:
-        for i, enemy in enumerate(self.enemies):
-            enemy.no = i
-            enemy.set_target(tuple(self.player.position.position))
-
         delta = self.linked_instance.delta
+
+        self.spawner.update(delta)
+
+        for enemy in self.enemies:
+            enemy.set_target(tuple(self.player.position.position))
         self.entity_scene.update(delta)
+
         self.entity_scene.camera.position.x = self.player.position.x-200
         self.entity_scene.camera.position.y = self.player.position.y-150
+
+        pygame.image.save(self.linked_instance.window, "world.png", "png")
 
     def render(self) -> None:
         self.entity_scene.z_sort()

@@ -35,4 +35,6 @@ class EnemyBullet(GameEntity):
             return
 
         dist_to_player = self.position.position - self.level.player.position.position
-
+        if dist_to_player.length() < 10:
+            if self.level.player.hit(1):   # Return true if the player is able to take damage
+                self.destroy()

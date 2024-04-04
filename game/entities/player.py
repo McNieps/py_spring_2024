@@ -94,7 +94,7 @@ class Player(GameEntity):
 
         impulse_vec = -pygame.Vector2(200, 150) + pygame.mouse.get_pos()
         impulse_vec.scale_to_length(self.attributes["dodge_impulse"])
-        self.position.body.apply_impulse_at_local_point(tuple(impulse_vec))
+        # self.position.body.apply_impulse_at_local_point(tuple(impulse_vec))
 
     @staticmethod
     def reset_events() -> dict:
@@ -140,3 +140,17 @@ class Player(GameEntity):
             self.xp_to_max += 2
             self.gain_xp(0)
             Resource.sound["effects"]["level_up"].play()
+
+    def hit(self,
+            damage: float) -> bool:
+        print("hello")
+        if self.state["state"]:
+            print("nice try pal")
+            return False
+
+        if self.hp < 0:
+            return False
+
+        Resource.sound["effects"]["hit"].play()
+        self.hp -= damage
+        return True

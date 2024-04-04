@@ -14,18 +14,16 @@ class BaseProjectile(Entity):
                  sprite: Sprite) -> None:
 
         super().__init__(position, sprite)
-
         self.aim_vec = aim_vec
         self.linked_weapon = linked_weapon
-
-        self.dict = Resource.data["weapons"][self.__class__.__name__.lower().removesuffix("projectile")]
+        self.attributes = self.linked_weapon.attributes
         self.hit_entities = set()
 
     def update(self,
                delta: float) -> None:
 
         speed_vec = self.aim_vec.copy()
-        speed_vec.scale_to_length(self.dict["base"]["speed"])
+        speed_vec.scale_to_length(self.linked_weapon.attributes["speed"])
         self.position.position += speed_vec * delta
 
 
@@ -36,8 +34,12 @@ class BaseWeapon(Entity):
                  sprite: Sprite):
 
         super().__init__(position, sprite)
+        self.attributes = Resource.data["weapons"][self.__class__.__name__.lower()].copy()
         self.linked_entity = linked_entity
         self.side = 1
+
+    def reset_attributes(self):
+        self.attributes = Resource.data["weapons"][self.__class__.__name__.lower()].copy()
 
     async def attack(self,
                      aim_vec: pygame.Vector2) -> None:

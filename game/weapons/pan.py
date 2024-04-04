@@ -18,8 +18,8 @@ class PanProjectile(BaseProjectile):
                  aim_vec: pygame.Vector2,
                  base_position: pygame.Vector2) -> None:
 
-        self.half_size = (Resource.data["weapons"]["pan"]["animation"]["max_width"] +
-                          Resource.data["weapons"]["pan"]["animation"]["radius"])
+        self.half_size = (Resource.data["weapons"]["pan"]["animation_max_width"] +
+                          Resource.data["weapons"]["pan"]["animation_radius"])
 
         super().__init__(linked_weapon,
                          aim_vec,
@@ -33,7 +33,7 @@ class PanProjectile(BaseProjectile):
 
         aim_angle = aim_vec.angle_to((1, 0))
         self.direction = random.randint(0, 1)*2-1
-        self.start_angle = aim_angle - self.dict["swing_arc_length"]/2 * self.direction
+        self.start_angle = aim_angle - self.linked_weapon.attributes["swing_arc_length"]/2 * self.direction
         self.current_angle = self.start_angle
         self.anim_points = []
 
@@ -44,8 +44,8 @@ class PanProjectile(BaseProjectile):
 
         super().update(delta)
 
-        percent_in = (time.time()-self.start_time)/self.dict["base"]["duration"]
-        self.current_angle = self.start_angle + percent_in * self.dict["swing_arc_length"] * self.direction
+        percent_in = (time.time()-self.start_time)/self.attributes["duration"]
+        self.current_angle = self.start_angle + percent_in * self.attributes["swing_arc_length"] * self.direction
 
         if percent_in > 1:
             self.destroy()
@@ -56,7 +56,7 @@ class PanProjectile(BaseProjectile):
 
         self.draw_effect(percent_in)
         self.fade_effect(percent_in)
-        self.linked_weapon.animation_angle = (percent_in-0.5) * self.dict["swing_arc_length"] * self.direction
+        self.linked_weapon.animation_angle = (percent_in-0.5) * self.attributes["swing_arc_length"] * self.direction
         self.check_hits()
 
     def draw_effect(self,
@@ -64,7 +64,7 @@ class PanProjectile(BaseProjectile):
 
         self.sprite.surface.fill((255, 255, 255, 0))
 
-        pos = pygame.Vector2(self.dict["animation"]["radius"], 0)
+        pos = pygame.Vector2(self.attributes["animation_radius"], 0)
         pos.rotate_ip(-self.current_angle)
         pos = pos + (self.half_size, self.half_size)
 
@@ -72,24 +72,24 @@ class PanProjectile(BaseProjectile):
 
         for pos, date in self.anim_points:
             pos_percentage = date/percent_in
-            point_size = int(self.dict["animation"]["max_width"]*pos_percentage)
+            point_size = int(self.attributes["animation_max_width"]*pos_percentage)
             pygame.draw.circle(self.sprite.surface, (246, 205, 38), pos, point_size)
 
     def fade_effect(self,
                     percent_in: float) -> None:
 
-        if self.dict["animation"]["fade"] != 0 and percent_in > self.dict["animation"]["fade"]:
-            max_fade_time = 1-self.dict["animation"]["fade"]
-            alpha = (1-(percent_in-self.dict["animation"]["fade"])/max_fade_time)*255
+        if self.attributes["animation_fade"] != 0 and percent_in > self.attributes["animation_fade"]:
+            max_fade_time = 1-self.attributes["animation_fade"]
+            alpha = (1-(percent_in-self.attributes["animation_fade"])/max_fade_time)*255
             self.sprite.surface.set_alpha(alpha)
             return
 
     def check_hits(self) -> None:
-        if len(self.hit_entities) == self.dict["base"]["max_hit"]:
+        if len(self.hit_entities) == self.attributes["max_hit"]:
             return
 
         for enemy in self.linked_weapon.linked_entity.level.entities:
-            if len(self.hit_entities) == self.dict["base"]["max_hit"]:
+            if len(self.hit_entities) == self.attributes["max_hit"]:
                 return
 
             if not isinstance(enemy, BaseEnemy):
@@ -99,12 +99,12 @@ class PanProjectile(BaseProjectile):
                 continue
 
             relative_pos = enemy.position.position - self.position.position
-            if 1 <= relative_pos.length() <= self.dict["base"]["radius"]:
+            if 1 <= relative_pos.length() <= self.attributes["radius"]:
                 raw_diff = abs(relative_pos.angle_to((1, 0)) % 360 - self.current_angle % 360)
                 if min(raw_diff, 360 - raw_diff) < 15:
-                    relative_pos.scale_to_length(self.dict["base"]["knockback"])
+                    relative_pos.scale_to_length(self.attributes["knockback"])
                     enemy.position.body.apply_impulse_at_local_point((tuple(relative_pos)))
-                    enemy_killed = enemy.hit(self.dict["base"]["damage"])
+                    enemy_killed = enemy.hit(self.attributes["damage"])
                     if self.sound is not None:
                         self.sound.play(Resource.sound["weapons"][f"pan_hit_{min(3, len(self.hit_entities))}"])
                     else:
@@ -130,6 +130,7 @@ class Pan(BaseWeapon):
         sprite = Sprite(Resource.image["sprite"]["weapons"]["pan"], "rotated")
         sprite.displayed = True
         super().__init__(linked_entity, AdvancedPos((0, 0), a=0), sprite)
+        self.attributes = Resource.data["weapons"]["pan"]
         self.linked_entity = linked_entity
         self.projectiles_to_spawn = []
         self.sound = None
@@ -163,7 +164,7 @@ class Pan(BaseWeapon):
     def attack(self,
                aim_vec: pygame.Vector2):
 
-        if self.time_since_last_attack < Resource.data["weapons"]["pan"]["base"]["attack_period"]:
+        if self.time_since_last_attack < self.attributes["attack_period"]:
             return
 
         self.time_since_last_attack = 0

@@ -4,8 +4,8 @@ BaseInstance:
   click: {key: B_1}
 
 InstanceGame:
-  up: {key: K_z}
-  left: {key: K_q}
+  up: {key: K_w}
+  left: {key: K_a}
   down: {key: K_s}
   right: {key: K_d}
   primary: {key: B_1}

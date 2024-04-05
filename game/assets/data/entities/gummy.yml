@@ -8,8 +8,8 @@ sprite:
   anchor: midbottom
 
 attributes:
-  xp: 2
-  health: 20
+  xp: 4
+  health: 15
   speed: 450
   attack_period: 3
   air_resistance: 0.002  # Of base speed conserved each sec

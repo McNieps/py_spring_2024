@@ -9,5 +9,5 @@ class ItemTin(BaseItem):
         super().__init__(level)
 
     def on_equip(self):
-        self.player.attributes["speed"] *= 1.2
+        self.player.attributes["speed"] *= 1.05
         self.primary.attributes["attack_period"] *= 1/1.25

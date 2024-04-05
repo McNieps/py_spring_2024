@@ -5,14 +5,14 @@ phase_1:
     - {tilemap: [data, tilemaps, phase_1_2], solid: true}
 
   waves:
-    - {time: 15, entities: {Gummy: 1}, every: 4, zone: near}
-    - {time: 30, entities: {Gummy: 1}, every: 2.5, zone: near}
+    - {time: 15, entities: {Gummy: 1}, every: 5, zone: near}
+    - {time: 30, entities: {Gummy: 1}, every: 4, zone: near}
     - {time: 31, entities: {Peanut: 4}, every: 4, zone: near}
     - {time: 32, entities: {XPChunk: 40}, every: 4, zone: near}
-    - {time: 45, entities: {Gummy: 2}, every: 2, zone: near}
-    - {time: 60, entities: {Gummy: 3}, every: 2, zone: near}
-    - {time: 75, entities: {Gummy: 4, Peanut: 1}, every: 2.5, zone: near}
-    - {time: 76, entities: {Peanut: 10}, every: 10, zone: [512, 512]}
+    - {time: 45, entities: {Gummy: 2}, every: 4, zone: near}
+    - {time: 60, entities: {Gummy: 3}, every: 4, zone: near}
+    - {time: 75, entities: {Gummy: 4, Peanut: 1}, every: 4, zone: near}
+    - {time: 76, entities: {Gummy: 4, Peanut: 10}, every: 6, zone: [512, 512]}
     - {time: 90, entities: {Gummy: 3}, every: 2, zone: near}
     - {time: 105, entities: {Gummy: 3}, every: 2, zone: near}
     - {time: 120, entities: {Gummy: 4}, every: 2, zone: near}

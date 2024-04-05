@@ -13,5 +13,18 @@ phase_1:
     - {time: 60, entities: {Gummy: 3}, every: 2, zone: near}
     - {time: 75, entities: {Gummy: 4, Peanut: 1}, every: 2.5, zone: near}
     - {time: 76, entities: {Peanut: 10}, every: 10, zone: [512, 512]}
-    - {time: 77, entities: {XPChunk: 40}, every: 10, zone: near}
+    - {time: 90, entities: {Gummy: 3}, every: 2, zone: near}
+    - {time: 105, entities: {Gummy: 3}, every: 2, zone: near}
+    - {time: 120, entities: {Gummy: 4}, every: 2, zone: near}
+    - {time: 135, entities: {Gummy: 5}, every: 2, zone: near}
+    - {time: 150, entities: {Gummy: 6}, every: 2, zone: near}
+    - {time: 165, entities: {Gummy: 8}, every: 2, zone: near}
+    - {time: 180, entities: {XPChunk: 40}, every: 10, zone: near}
+    - {time: 195, entities: {Gummy: 11}, every: 2, zone: near}
+    - {time: 210, entities: {Gummy: 13}, every: 2, zone: near}
+    - {time: 225, entities: {Gummy: 15}, every: 2, zone: near}
+    - {time: 240, entities: {Gummy: 17}, every: 2, zone: near}
+    - {time: 255, entities: {Gummy: 20}, every: 2, zone: near}
+    - {time: 270, entities: {Gummy: 23}, every: 2, zone: near}
+    - {time: 285, entities: {Gummy: 27}, every: 2, zone: near}
     - {time: 300, entities: {XPChunk: 1}, every: 0.1, zone: [512, 512]}
